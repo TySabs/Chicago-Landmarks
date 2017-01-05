@@ -1,0 +1,125 @@
+body {
+  font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;
+  background: #414141;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.navbar, .navbar-header {
+  background: #424242;
+  margin: 0;
+  height: 50px;
+}
+
+.navbar-header {
+  margin-left: 12px;
+}
+
+.navbar-toggle {
+  float: left;
+}
+
+#nav-hamburger {
+  font-size: 20px;
+  color: #FFF;
+}
+
+.navbar-brand {
+  float: left;
+  font-size: 16px;
+}
+
+.navbar-brand:hover {
+  background: #FFF;
+}
+
+@media screen and (max-width: 767px) {
+  .navbar-brand {
+    display: none;
+  }
+}
+
+.navbar-collapse {
+  display: inline;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media screen and (max-width: 767px) {
+  .navbar-collapse {
+      position: fixed;
+      top: 50px;
+      left: 0;
+      z-index: 10000;
+      width: 200px;
+      height: 100%;
+  }
+}
+
+#nav-list {
+  background: #424242;
+  margin-top: 0;
+  width: 100%;
+}
+
+
+.nav-item, .navbar-brand {
+  background: #424242;
+  color: #FFF;
+  font-weight: 700;
+}
+
+.nav-item {
+  margin-left: 10px;
+}
+
+#searchbar {
+  float: left;
+}
+
+@media screen and (min-width: 768px) {
+  #searchbar {
+    margin-top: 4px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .nav-search {
+    float: left;
+    margin: 0 2px 8px 2px;
+  }
+
+  .search-icon {
+    margin: 0 0 8px 6px;
+    padding: 8px 4px 2px 4px;
+  }
+}
+
+/* Map Styles */
+
+#map {
+  position: absolute;
+  margin: 0;
+  height: 86%;
+  width: 100%;
+}
+
+@media screen and (max-width: 767px) {
+  #map {
+    height: 500px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #map {
+    height: 300px;
+  }
+}
+
+#show-landmarks,
+#hide-landmarks {
+  margin: 10px auto 10px 20px;
+}
