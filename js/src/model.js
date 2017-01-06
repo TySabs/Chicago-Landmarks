@@ -7,7 +7,7 @@ var landmarks = [
   {title: 'Navy Pier', location: {lat: 41.8917, lng: -87.6063}}, // Featured
   {title: 'Field Museum of Natural History', location: {lat: 41.8663, lng: -87.6170}}, // Featured
   {title: 'Willis Tower', location: {lat: 41.8789, lng: -87.6359}}, // Featured
-  {title: 'Art Institute of Chicago', location: {lat: 41.8796, lng: -87.6237}} /*, // Featured
+  {title: 'Art Institute of Chicago', location: {lat: 41.8796, lng: -87.6237}} , // Featured
   {title: 'Buckingham Fountain', location: {lat: 41.8758, lng: -87.6189}},
   {title: 'Museum of Science and Industry', location: {lat: 41.7906, lng: -87.5830}},
   {title: 'Shedd Aquarium', location: {lat: 41.8676, lng: -87.6140}},
@@ -18,5 +18,5 @@ var landmarks = [
   {title: 'Guaranteed Rate Field (Comiskey)', location: {lat: 41.8299, lng: -87.6338}},
   {title: 'Crown Fountain', location: {lat: 41.8815, lng: -87.6237}},
   {title: 'McCormick Place', location: {lat: 41.8512, lng: -87.6170}},
-  {title: 'Lincoln Park Zoo', location: {lat: 41.9211, lng: -87.6340}} */
+  {title: 'Lincoln Park Zoo', location: {lat: 41.9211, lng: -87.6340}}
 ];

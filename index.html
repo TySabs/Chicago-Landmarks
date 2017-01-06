@@ -33,17 +33,21 @@
       </div>
 
       <div class="collapse navbar-collapse" id="navigation">
+        <button class="btn btn-secondary" id="btn-move-left" data-bind="click: moveFeaturedLandmarksLeft"><span class="glyphicon glyphicon-chevron-left"></span></button>
         <ul class="nav navbar-nav nav-pills" id="nav-list" data-bind="foreach: landmarkList">
           <li><a class="nav-item" href="#" data-bind="text: title, click: zoomToMarker"></a></li>
         </ul>
+        <button class="btn btn-secondary" id="btn-move-right" data-bind="click: moveFeaturedLandmarksRight"><span class="glyphicon glyphicon-chevron-right"></span></button>
       </div>
 
     </div>
   </nav>
 
   <div class="navbar navbar-fixed-bottom">
-    <button type="button" class="btn btn-primary" id="show-landmarks" data-bind="click: showLandmarks">Show Landmarks</button>
-    <button type="button" class="btn btn-danger" id="hide-landmarks" data-bind="click: hideMarkers">Hide Landmarks</button>
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary" id="show-landmarks" data-bind="click: showLandmarks">Show Landmarks</button>
+      <button type="button" class="btn btn-danger" id="hide-landmarks" data-bind="click: hideMarkers">Hide Landmarks</button>
+    </div>
   </div>
 
   <div id="map"></div>
