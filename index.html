@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- Icon source: Wikipedia Commons url= https://commons.wikimedia.org/wiki/File:Antu_tag-places-black.svg -->
+    <!-- Icon source: Wikimedia Commons url= https://commons.wikimedia.org/wiki/File:Antu_tag-places-black.svg -->
     <link rel="icon" type="image/gif/png" href="img/world_icon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -35,7 +35,7 @@
       <div class="collapse navbar-collapse" id="navigation">
         <button class="btn btn-secondary" id="btn-move-left" data-bind="click: moveFeaturedLandmarksLeft"><span class="glyphicon glyphicon-chevron-left"></span></button>
         <ul class="nav navbar-nav nav-pills" id="nav-list" data-bind="foreach: landmarkList">
-          <li><a class="nav-item" href="#" data-bind="text: title, click: zoomToMarker"></a></li>
+          <li><a class="nav-item" href="#" data-bind="text: title, click: $root.zoomToMarker"></a></li>
         </ul>
         <button class="btn btn-secondary" id="btn-move-right" data-bind="click: moveFeaturedLandmarksRight"><span class="glyphicon glyphicon-chevron-right"></span></button>
       </div>

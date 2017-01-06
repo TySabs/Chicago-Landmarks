@@ -166,20 +166,57 @@ var ViewModel = function() {
   };
 
   this.moveFeaturedLandmarksLeft = function() {
+    self.indexStart(self.indexStart() - 1);
+    self.indexEnd(self.indexEnd() - 1);
+    if ((self.indexStart() > -1) && (self.indexEnd() > -1)) {
+      console.log("End", self.indexEnd());
+      console.log("Start: ", self.indexStart());
+      self.landmarkList.pop();
+      self.landmarkList.unshift(landmarks[self.indexStart()]);
+    } else if (self.indexStart() <= -1) {
+      var landmarksLength = landmarks.length - 1;
+      self.indexStart(landmarksLength);
+      console.log("End", self.indexEnd());
+      console.log("Start: ", self.indexStart());
+      self.landmarkList.pop();
+      self.landmarkList.unshift(landmarks[self.indexStart()]);
+    } else if (self.indexEnd() <= -1) {
+      var landmarksLength = landmarks.length - 1;
+      self.indexEnd(landmarksLength);
+      console.log("End", self.indexEnd());
+      console.log("Start: ", self.indexStart());
+      self.landmarkList.pop();
+      self.landmarkList.unshift(landmarks[self.indexStart()]);
+    }
 
   };
 
   // Move the featured landmark selection to the right
   this.moveFeaturedLandmarksRight = function() {
     self.indexEnd(self.indexEnd() + 1);
-    console.log(self.indexEnd());
-
-    self.landmarkList.shift();
-    self.landmarkList.push(landmarks[self.indexEnd()]);
+    self.indexStart(self.indexStart() + 1);
+    if ((self.indexEnd() < landmarks.length) && (self.indexStart() < landmarks.length)) {
+      console.log("End", self.indexEnd());
+      console.log("Start: ", self.indexStart());
+      self.landmarkList.shift();
+      self.landmarkList.push(landmarks[self.indexEnd()]);
+    } else if (self.indexEnd() >= landmarks.length) {
+      self.indexEnd(0);
+      console.log("End", self.indexEnd());
+      console.log("Start: ", self.indexStart());
+      self.landmarkList.shift();
+      self.landmarkList.push(landmarks[self.indexEnd()]);
+    } else if (self.indexStart() >= landmarks.length) {
+      self.indexStart(0);
+      console.log("End", self.indexEnd());
+      console.log("Start: ", self.indexStart());
+      self.landmarkList.shift();
+      self.landmarkList.push(landmarks[self.indexEnd()]);
+    }
   };
 
   this.initApp();
 }
 
 
-ko.applyBindings(ViewModel);
+ko.applyBindings(new ViewModel());
