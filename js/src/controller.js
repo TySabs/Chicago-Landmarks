@@ -22,6 +22,7 @@ var mapController = {
       var marker = new google.maps.Marker({
         position: position,
         title: title,
+        map: mapController.map,
         animation: google.maps.Animation.DROP,
         icon: defaultIcon,
         id: i
@@ -38,28 +39,6 @@ var mapController = {
         this.setIcon(defaultIcon);
       });
     }
-    // Create click events to hide/show landmarks
-    document.getElementById('show-landmarks').addEventListener('click', this.showLandmarks);
-    document.getElementById('hide-landmarks').addEventListener('click', this.hideMarkers);
-  },
-
-  showLandmarks: function() {
-    console.log("showLandmarks called");
-
-    var bounds = new google.maps.LatLngBounds();
-    // Extend the boundaries of the map for each marker and display the marker
-    for (var i = 0; i < markers.length; i++) {
-      markers[i].setMap(mapController.map);
-      bounds.extend(markers[i].position);
-    }
-    mapController.map.fitBounds(bounds);
-  },
-
-  hideMarkers: function() {
-    console.log("hideMarkers called");
-    for (var i = 0; i < markers.length; i++) {
-      markers[i].setMap(null);
-    }
   },
 
   makeMarkerIcon: function(markerColor) {
@@ -72,21 +51,61 @@ var mapController = {
     new google.maps.Size(21,34));
     return markerImage;
   }
-}
+};
 
 var ViewModel = function() {
 
   // 'self' keeps 'this' in scope for nested functions
   var self = this;
 
+  // Initialize the slide functionality of the hamburger toggle button
   this.initHamburger = function() {
     $('#nav-hamburger').on('click', function() {
-      $navMenuCont = $($(this).data('target'));
-      $navMenuCont.animate({'width':'toggle'}, 350);
+      var $slider = $($(this).data('target'));
+      $slider.animate({'width':'toggle'}, 350);
     });
-  }
+  };
 
-  this.initHamburger();
+  // Initialize the application
+  this.initApp = function() {
+    self.initHamburger();
+
+    self.landmarkList = ko.observableArray([]);
+
+    // Add all our landmarks to the landmarkList observable array
+    landmarks.forEach(function(thisLandmark){
+      self.landmarkList.push(thisLandmark);
+    });
+  };
+
+  // Zoom to selected marker when user clicks on any item on the list
+  this.zoomToMarker = function() {
+    mapController.map.setCenter(this.location);
+    mapController.map.setZoom(16);
+  };
+
+  // Show all the landmark markers on the map
+  this.showLandmarks = function() {
+
+    var map = mapController.map;
+    var bounds = new google.maps.LatLngBounds();
+    // Extend the boundaries of the map for each marker and display the marker
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+      bounds.extend(markers[i].position);
+    }
+    map.fitBounds(bounds);
+  };
+
+  // Hide all markers on the map
+  this.hideMarkers = function() {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+    }
+  };
+
+
+  this.initApp();
 }
 
 ko.applyBindings(ViewModel);

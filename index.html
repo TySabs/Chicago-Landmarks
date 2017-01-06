@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <title>Google Maps Sandbox</title>
   </head>
+
 <body>
   <nav class="navbar navbar-static-top" role="navigation">
     <div class="container nav-container">
@@ -32,21 +33,17 @@
       </div>
 
       <div class="collapse navbar-collapse" id="navigation">
-            <ul class="nav navbar-nav" id="nav-list">
-                <li><a class="nav-item" href="#">Landmark 1</a></li>
-                <li><a class="nav-item" href="#">Short LM</a></li>
-                <li><a class="nav-item" href="#">Landmark 3</a></li>
-                <li><a class="nav-item" href="#">Landmark Long Name</a></li>
-                <li><a class="nav-item" href="#">Landmark 5</a></li>
-            </ul>
-        </div>
+        <ul class="nav navbar-nav nav-pills" id="nav-list" data-bind="foreach: landmarkList">
+          <li><a class="nav-item" href="#" data-bind="text: title, click: zoomToMarker"></a></li>
+        </ul>
+      </div>
 
     </div>
   </nav>
 
   <div class="navbar navbar-fixed-bottom">
-    <button type="button" class="btn btn-primary" id="show-landmarks">Show Landmarks</button>
-    <button type="button" class="btn btn-danger" id="hide-landmarks">Hide Landmarks</button>
+    <button type="button" class="btn btn-primary" id="show-landmarks" data-bind="click: showLandmarks">Show Landmarks</button>
+    <button type="button" class="btn btn-danger" id="hide-landmarks" data-bind="click: hideMarkers">Hide Landmarks</button>
   </div>
 
   <div id="map"></div>
