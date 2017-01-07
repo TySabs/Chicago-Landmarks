@@ -90,6 +90,44 @@ body {
   margin-top: 10px;
 }
 
+.btn-smallscreen {
+  margin-top: 0;
+  width: 155px;
+  background: #626262;
+  color: #FFF;
+  border-radius: 0;
+}
+
+.btn-smallscreen:hover, .btn-smallscreen:visited {
+  color: #FFF;
+}
+
+@media screen and (min-width: 768px) {
+  .btn-bigscreen {
+    display: inline;
+  }
+
+  .btn-smallscreen {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .btn-bigscreen {
+    display: none;
+  }
+
+  .btn-smallscreen {
+    display: inline;
+  }
+
+  .navbar-nav {
+    margin-bottom: 0;
+  }
+}
+
+
+
 #searchbar {
   float: left;
   border: none;
@@ -131,8 +169,8 @@ body {
 
 @media screen and (min-width: 768px) {
   #map {
-    margin-top: 80px;
-    height: 74%;
+    margin-top: 20px;
+    height: 82%;
   }
 }
 

@@ -33,11 +33,25 @@
       </div>
 
       <div class="collapse navbar-collapse" id="navigation">
-        <button class="btn btn-secondary" id="btn-move-left" data-bind="click: moveFeaturedLandmarksLeft"><span class="glyphicon glyphicon-chevron-left"></span></button>
-        <ul class="nav navbar-nav nav-pills" id="nav-list" data-bind="foreach: landmarkList">
+
+        <button class="btn btn-secondary btn-bigscreen" id="btn-move-left" data-bind="click: moveFeaturedLandmarksLeft">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </button>
+        <button class="btn btn-secondary btn-smallscreen" data-bind="click: moveFeaturedLandmarksLeft">
+          <span class="glyphicon glyphicon-menu-up"></span>
+        </button>
+
+        <ul class="nav navbar-nav" id="nav-list" data-bind="foreach: landmarkList">
           <li><a class="nav-item" href="#" data-bind="text: title, click: $root.zoomToMarker"></a></li>
         </ul>
-        <button class="btn btn-secondary" id="btn-move-right" data-bind="click: moveFeaturedLandmarksRight"><span class="glyphicon glyphicon-chevron-right"></span></button>
+
+        <button class="btn btn-secondary btn-bigscreen" id="btn-move-right" data-bind="click: moveFeaturedLandmarksRight">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+        <button class="btn btn-secondary btn-smallscreen" data-bind="click: moveFeaturedLandmarksRight">
+          <span class="glyphicon glyphicon-menu-down"></span>
+        </button>
+
       </div>
 
     </div>

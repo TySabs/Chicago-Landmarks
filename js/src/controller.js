@@ -9,7 +9,6 @@ var mapController = {
       mapTypeControl: false
     });
 
-
     // Create default icon (red)
     var defaultIcon = this.makeMarkerIcon('FF0000');
 
@@ -37,6 +36,7 @@ var mapController = {
 
 
       marker.addListener('click', function() {
+        console.log(this);
         self.populateInfoWindow(this, marker.infoWindow);
       });
 
@@ -131,6 +131,13 @@ var ViewModel = function() {
     self.landmarkList = ko.observableArray([]);
     self.indexStart = ko.observable(0);
     self.indexEnd = ko.observable(4);
+    self.currentMarker = ko.observable(null);
+
+    self.allMarkers = ko.observableArray([]);
+
+//    landmarks.forEach(function(landmark) {
+//      self.allMarkers.push(new Marker(landmark));
+//    });
 
     // Only push first five landmarks into the landmarkList
     for (var i = self.indexStart(); i < self.indexEnd() + 1; i++) {
@@ -143,7 +150,14 @@ var ViewModel = function() {
   this.zoomToMarker = function() {
     mapController.map.setCenter(this.location);
     mapController.map.setZoom(16);
+    self.setCurrentMarker(this);
   };
+
+  this.setCurrentMarker = function(clickedMarker) {
+    console.log(clickedMarker);
+    self.currentMarker(clickedMarker);
+  };
+
 
   // Show all the landmark markers on the map
   this.showLandmarks = function() {
