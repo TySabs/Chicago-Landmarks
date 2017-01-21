@@ -1,69 +1,265 @@
-//// controller.js handles all of the ViewModel functionality of the app /////
-// This includes the global variable map and constructor function ViewModel
-var mapController = {
-  initMap: function() {
-    var self = this;
-    this.map = new google.maps.Map(document.getElementById('map'), {
+var ViewModel = function() {
+  // 'self' keeps 'this' in scope for nested functions
+  var self = this;
+
+  // Initialize the map.
+  this.initMap = function() {
+    /* Pale Dawn Styles url: https://snazzymaps.com/style/1/pale-dawn */
+    var paleDawnStyles = [
+      {
+        "featureType": "administrative",
+        "elementType": "all",
+        "stylers": [
+          {
+            "visibility": "on"
+          },
+          {
+            "lightness": 33
+          }
+        ]
+      },
+      {
+        "featureType": "landscape",
+        "elementType": "all",
+        "stylers": [
+          {
+            "color": "#f2e5d4"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#c5dac6"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "labels",
+        "stylers": [
+          {
+            "visibility": "on"
+          },
+          {
+            "lightness": 20
+          }
+        ]
+      },
+      {
+        "featureType": "road",
+        "elementType": "all",
+        "stylers": [
+          {
+            "lightness": 20
+          }
+        ]
+      },
+      {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#c5c6c6"
+          }
+        ]
+      },
+      {
+        "featureType": "road.arterial",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#e4d7c6"
+          }
+        ]
+      },
+      {
+        "featureType": "road.local",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#fbfaf7"
+          }
+        ]
+      },
+      {
+        "featureType": "water",
+        "elementType": "all",
+        "stylers": [
+          {
+            "visibility": "on"
+          },
+          {
+            "color": "#acbcc9"
+          }
+        ]
+      }];
+    self.map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 41.8789, lng: -87.6359},
+      styles: paleDawnStyles,
       zoom: 12,
       mapTypeControl: false
     });
+  }; // End initMap()
 
-    // Create default icon (red)
-    var defaultIcon = this.makeMarkerIcon('FF0000');
+  // Initialize the slide functionality of the hamburger toggle button.
+  this.initHamburger = function() {
+    $('#nav-hamburger').on('click', function() {
+      var $slider = $($(this).data('target'));
+      $slider.animate({'width':'toggle'}, 350);
+    });
+  };
 
-    // Create a highlighted marker for when use mouses over (yellow)
-    var highlightedIcon = this.makeMarkerIcon('FFFF24');
+  // Initialize app by calling all our init functions.
+  this.initApp = function() {
+    this.initMap();
+    this.initHamburger();
+    this.createMarkers();
 
-    // Create a list of markers based off landmarks array
-    for (var i = 0; i < landmarks.length; i++) {
-      // Get the position from landmarks array
-      var position = landmarks[i].location;
-      var title = landmarks[i].title;
-      // Create a marker for each location, then push markers into an array
-      var marker = new google.maps.Marker({
-        position: position,
-        title: title,
-        map: mapController.map,
-        animation: google.maps.Animation.DROP,
-        icon: defaultIcon,
-        id: i
-      });
-      // Push the marker to our array of markers
-      markers.push(marker);
+    // self.landmarkList shows the top five featured landmarks
+    self.landmarkList = ko.observableArray([]);
 
-      marker.infoWindow = new google.maps.InfoWindow();
+    // self.indexStart/End allows calculation of which landmarks belong in self.landmarkList
+    self.indexStart = ko.observable(0);
+    self.indexEnd = ko.observable(4);
 
+    // self.CurrentMarker allows user to select a landmark to view more detailed information
+    self.currentMarker = ko.observable();
 
-      marker.addListener('click', function() {
-        console.log(this);
-        self.populateInfoWindow(this, marker.infoWindow);
-      });
+    // self.infoWindow changes to display a marker's corresponding infoWindow
+    var largeInfoWindow = new google.maps.InfoWindow();
+    self.infoWindow = ko.observable(largeInfoWindow);
 
-      // Set marker color to yellow on mouseover event
-      marker.addListener('mouseover', function() {
-        this.setIcon(highlightedIcon);
-      });
-      // Set marker color to red on mouseout event - back to default
-      marker.addListener('mouseout', function() {
-        this.setIcon(defaultIcon);
-      });
+    // Only push first five landmarks into the landmarkList
+    for (var i = self.indexStart(); i < self.indexEnd() + 1; i++) {
+      self.landmarkList.push(landmarks[i]);
     }
-  },
+  };
 
-  makeMarkerIcon: function(markerColor) {
-    var markerImage = new google.maps.MarkerImage(
-    'https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
-    '|40|_|%E2%80%A2',
-    new google.maps.Size(21, 34),
-    new google.maps.Point(0, 0),
-    new google.maps.Point(10, 34),
-    new google.maps.Size(21,34));
-    return markerImage;
-  },
+  // Create a marker for each landmark.
+  this.createMarkers = function() {
+    landmarks.forEach(function(landmark) {
+      // Create a new marker property for each landmark
+      landmark.marker = new Marker(landmark);
 
-  populateInfoWindow: function(marker, infoWindow) {
-    console.log("called populateInfoWindow");
+      // Add a click handler to each mark which calls self.setAsCurrentMarker
+      landmark.marker.addListener('click', function() {
+        self.setAsCurrentMarker(landmark);
+      });
+
+      self.allMarkers = ko.observableArray([]);
+      self.allMarkers.push(landmark.marker);
+    }); // End landmarks.forEach()
+  };
+
+  this.setAsCurrentMarker = function(clickedMarker) {
+
+    // Check to make sure clickedMarker is not already selected
+    if (clickedMarker != self.currentMarker()) {
+      // Show clickedMarker by setting its map to ViewModel.map
+      clickedMarker.marker.setMap(self.map);
+
+      // Center map on clicked marker
+      self.map.setCenter(clickedMarker.location);
+
+      // Set currentMarker to the clicked landmark's marker
+      self.currentMarker = ko.observable(clickedMarker.marker);
+
+      // Update the infoWindow
+      self.populateInfoWindow(clickedMarker.marker, self.infoWindow());
+    }
+  };
+
+  // Show all the landmark markers on the map
+  this.showLandmarks = function() {
+    var map = self.map;
+    var bounds = new google.maps.LatLngBounds();
+    // Extend the boundaries of the map for each marker and display the marker
+    for (var i = 0; i < landmarks.length; i++) {
+      landmarks[i].marker.setMap(map);
+      bounds.extend(landmarks[i].marker.position);
+    }
+    map.fitBounds(bounds);
+  };
+
+  // Hide all markers on the map
+  this.hideMarkers = function() {
+    for (var i = 0; i < landmarks.length; i++) {
+      landmarks[i].marker.setMap(null);
+    }
+  };
+
+  // Move featured landmarks to the left
+  this.moveFeaturedLandmarksLeft = function() {
+    // Decrement index start and end
+    self.indexStart(self.indexStart() - 1);
+    self.indexEnd(self.indexEnd() - 1);
+
+    // If index end & start are both above landmarks beginning index - Act as normal:
+    // Remove last landmark on featured landmarks array,
+    // And add next landmark on the beginning of featured landmarks array
+    if ((self.indexStart() > -1) && (self.indexEnd() > -1)) {
+      self.landmarkList.pop();
+      self.landmarkList.unshift(landmarks[self.indexStart()]);
+
+    // If indexStart is less than beginning of landmarks array,
+    // Move indexStart to the back of landmarks array,
+    // But treat indexEnd as normal
+    } else if (self.indexStart() <= -1) {
+      var landmarksLength = landmarks.length - 1;
+      self.indexStart(landmarksLength);
+
+      self.landmarkList.pop();
+      self.landmarkList.unshift(landmarks[self.indexStart()]);
+
+    // If indexEnd is less than beginning of landmarks array,
+    // Move indexEnd to back of featured landmarks array,
+    // But treat indexStart as normal
+    } else if (self.indexEnd() <= -1) {
+      var landmarksLength = landmarks.length - 1;
+      self.indexEnd(landmarksLength);
+
+      self.landmarkList.pop();
+      self.landmarkList.unshift(landmarks[self.indexStart()]);
+    } // End Conditional
+  };
+
+  // Move the featured landmark selection to the right
+  this.moveFeaturedLandmarksRight = function() {
+    // Increment index start and end
+    self.indexEnd(self.indexEnd() + 1);
+    self.indexStart(self.indexStart() + 1);
+
+    // If index end & start are both below landmarks.length - Act as normal:
+    // Remove first landmark on featured landmarks array
+    // And add next landmark on the end of featured landmarks array
+    if ((self.indexEnd() < landmarks.length) && (self.indexStart() < landmarks.length)) {
+      self.landmarkList.shift();
+      self.landmarkList.push(landmarks[self.indexEnd()]);
+
+    // If indexEnd is greater than landmarks.length,
+    // Then move indexEnd back to beginning of array
+    // But treat indexStart as normal
+    } else if (self.indexEnd() >= landmarks.length) {
+      self.indexEnd(0);
+
+      self.landmarkList.shift();
+      self.landmarkList.push(landmarks[self.indexEnd()]);
+
+    // If indexStart is greater than landmarks.length,
+    // Treat indexEnd as normal, but
+    // Then move indexStart back to beginning of the array
+    } else if (self.indexStart() >= landmarks.length) {
+      self.indexStart(0);
+
+      self.landmarkList.shift();
+      self.landmarkList.push(landmarks[self.indexEnd()]);
+    } // End Conditional
+  };
+
+  this.populateInfoWindow = function(marker, infoWindow) {
     // First check to make sure infoWindow is not already opened on this marker
     if (infoWindow.marker != marker) {
       infoWindow.setContent('');
@@ -83,7 +279,9 @@ var mapController = {
 
           // heading variable controls the initial pitch of streetview
           var heading = google.maps.geometry.spherical.computeHeading(nearStreetViewLocation, marker.position);
-          infoWindow.setContent('<div class="marker-title">' + marker.title + '</div><div id="pano"></div>');
+
+          infoWindow.setContent('<div class="marker-div" data-bind="with: $root.currentMarker"><div class="marker-title">' + marker.title + '</div><div id="pano"></div></div>');
+
 
           // Set the properties of streetview
           var panoramaOptions = {
@@ -106,131 +304,12 @@ var mapController = {
       // 50 meters of the markers position
       streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
       // Open the infoWindow on the correct marker
-      infoWindow.open(mapController.map, marker);
-    }
-  }
-};
-
-var ViewModel = function() {
-
-  // 'self' keeps 'this' in scope for nested functions
-  var self = this;
-
-  // Initialize the slide functionality of the hamburger toggle button
-  this.initHamburger = function() {
-    $('#nav-hamburger').on('click', function() {
-      var $slider = $($(this).data('target'));
-      $slider.animate({'width':'toggle'}, 350);
-    });
-  };
-
-  // Initialize the application
-  this.initApp = function() {
-    self.initHamburger();
-
-    self.landmarkList = ko.observableArray([]);
-    self.indexStart = ko.observable(0);
-    self.indexEnd = ko.observable(4);
-    self.currentMarker = ko.observable(null);
-
-    self.allMarkers = ko.observableArray([]);
-
-//    landmarks.forEach(function(landmark) {
-//      self.allMarkers.push(new Marker(landmark));
-//    });
-
-    // Only push first five landmarks into the landmarkList
-    for (var i = self.indexStart(); i < self.indexEnd() + 1; i++) {
-      self.landmarkList.push(landmarks[i]);
-    }
-
-  };
-
-  // Zoom to selected marker when user clicks on any item on the list
-  this.zoomToMarker = function() {
-    mapController.map.setCenter(this.location);
-    mapController.map.setZoom(16);
-    self.setCurrentMarker(this);
-  };
-
-  this.setCurrentMarker = function(clickedMarker) {
-    console.log(clickedMarker);
-    self.currentMarker(clickedMarker);
-  };
-
-
-  // Show all the landmark markers on the map
-  this.showLandmarks = function() {
-
-    var map = mapController.map;
-    var bounds = new google.maps.LatLngBounds();
-    // Extend the boundaries of the map for each marker and display the marker
-    for (var i = 0; i < markers.length; i++) {
-      markers[i].setMap(map);
-      bounds.extend(markers[i].position);
-    }
-    map.fitBounds(bounds);
-  };
-
-  // Hide all markers on the map
-  this.hideMarkers = function() {
-    for (var i = 0; i < markers.length; i++) {
-      markers[i].setMap(null);
+      infoWindow.open(self.map, marker);
     }
   };
 
-  this.moveFeaturedLandmarksLeft = function() {
-    self.indexStart(self.indexStart() - 1);
-    self.indexEnd(self.indexEnd() - 1);
-    if ((self.indexStart() > -1) && (self.indexEnd() > -1)) {
-      console.log("End", self.indexEnd());
-      console.log("Start: ", self.indexStart());
-      self.landmarkList.pop();
-      self.landmarkList.unshift(landmarks[self.indexStart()]);
-    } else if (self.indexStart() <= -1) {
-      var landmarksLength = landmarks.length - 1;
-      self.indexStart(landmarksLength);
-      console.log("End", self.indexEnd());
-      console.log("Start: ", self.indexStart());
-      self.landmarkList.pop();
-      self.landmarkList.unshift(landmarks[self.indexStart()]);
-    } else if (self.indexEnd() <= -1) {
-      var landmarksLength = landmarks.length - 1;
-      self.indexEnd(landmarksLength);
-      console.log("End", self.indexEnd());
-      console.log("Start: ", self.indexStart());
-      self.landmarkList.pop();
-      self.landmarkList.unshift(landmarks[self.indexStart()]);
-    }
-
-  };
-
-  // Move the featured landmark selection to the right
-  this.moveFeaturedLandmarksRight = function() {
-    self.indexEnd(self.indexEnd() + 1);
-    self.indexStart(self.indexStart() + 1);
-    if ((self.indexEnd() < landmarks.length) && (self.indexStart() < landmarks.length)) {
-      console.log("End", self.indexEnd());
-      console.log("Start: ", self.indexStart());
-      self.landmarkList.shift();
-      self.landmarkList.push(landmarks[self.indexEnd()]);
-    } else if (self.indexEnd() >= landmarks.length) {
-      self.indexEnd(0);
-      console.log("End", self.indexEnd());
-      console.log("Start: ", self.indexStart());
-      self.landmarkList.shift();
-      self.landmarkList.push(landmarks[self.indexEnd()]);
-    } else if (self.indexStart() >= landmarks.length) {
-      self.indexStart(0);
-      console.log("End", self.indexEnd());
-      console.log("Start: ", self.indexStart());
-      self.landmarkList.shift();
-      self.landmarkList.push(landmarks[self.indexEnd()]);
-    }
-  };
-
+  // Invoke the initialize function.
   this.initApp();
-}
-
+};
 
 ko.applyBindings(new ViewModel());

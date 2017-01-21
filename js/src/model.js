@@ -1,5 +1,4 @@
 //////// model.js controls all the data for our Landmark app //////////
-var markers = [];
 
 var landmarks = [
   {title: 'Cloud Gate (The Bean)', location: {lat: 41.8827, lng: -87.6233}}, // Featured
