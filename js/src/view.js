@@ -35,17 +35,6 @@ var Marker = function(data) {
       id: data
     });
 
-//  marker.infoWindow = new google.maps.InfoWindow();
-
-/*  marker.addListener('click', function() {
-    self.populateInfoWindow(this, marker.infoWindow);
-  });
-*/
-
-/*  marker.addListener('click', function() {
-    ViewModel.setAsCurrentMarker(this);
-  });
-*/
   // Set marker color to yellow on mouseover event
   marker.addListener('mouseover', function() {
     this.setIcon(highlightedIcon);

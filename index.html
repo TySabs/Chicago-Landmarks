@@ -26,7 +26,7 @@
         </a>
         <form role="search" class="navbar-form nav-search" id="searchbar">
           <div class="nav-search form-group">
-            <input type="text" class="nav-search form-control" placeholder="Search">
+            <input type="text" class="nav-search form-control" id="places-search" placeholder="Search" data-bind="value: $root.query, valueUpdate: 'keyup'" autocomplete="off">
           </div>
           <button type="submit" class="btn btn-default search-icon"><span class="nav-search glyphicon glyphicon-search"></span></button>
         </form>
@@ -41,7 +41,7 @@
           <span class="glyphicon glyphicon-menu-up"></span>
         </button>
 
-        <ul class="nav navbar-nav" id="nav-list" data-bind="foreach: landmarkList">
+        <ul class="nav navbar-nav" id="nav-list" data-bind="foreach: searchResults">
           <li><a class="nav-item" href="#" data-bind="text: title, click: $root.setAsCurrentMarker"></a></li>
         </ul>
 
@@ -60,7 +60,8 @@
   <div class="navbar navbar-fixed-bottom">
     <div class="btn-group">
       <button type="button" class="btn btn-primary" id="show-landmarks" data-bind="click: showLandmarks">Show Landmarks</button>
-      <button type="button" class="btn btn-danger" id="hide-landmarks" data-bind="click: hideMarkers">Hide Landmarks</button>
+      <button type="button" class="btn btn-danger" id="hide-landmarks" data-bind="click: hideMarkers(landmarks)">Hide Landmarks</button>
+      <button type="button" class="btn btn-success" id="hide-landmarks" data-bind="click: toggleDrawing">Custom Search</button>
     </div>
   </div>
 

@@ -112,14 +112,64 @@ var ViewModel = function() {
     });
   };
 
+  this.initDrawingManager = function() {
+    // Initialize the drawing manager
+    var drawingManager = new google.maps.drawing.DrawingManager({
+      drawingMode: google.maps.drawing.OverlayType.POLYGON,
+      drawingControl: true,
+      drawingControlOptions: {
+        position: google.maps.ControlPosition.TOP_LEFT,
+        drawingModes: [
+          google.maps.drawing.OverlayType.POLYGON
+        ]
+      }
+    });
+
+    self.polygon = null;
+
+    self.drawingManager = drawingManager;
+
+    self.drawingManager.addListener('overlaycomplete', function(event) {
+      // First, check if there is an existing polygon
+      // If there is, get rid of it and remove the markers
+      if (self.polygon) {
+        self.polygon.setMap(null);
+        self.hideMarkers(landmarks);
+      }
+      // Turn off drawing mode
+      self.drawingManager.setDrawingMode(null);
+      // Create a new editable polygon from the overlay
+      self.polygon = event.overlay;
+      self.polygon.setEditable(true);
+      // Search within the polygon
+      self.searchWithinPolygon();
+      // Make sure the search is re-done if the poly is changed
+      self.polygon.getPath().addListener('set_at', self.searchWithinPolygon);
+      self.polygon.getPath().addListener('insert_at', self.searchWithinPolygon);
+    });
+  };
+
   // Initialize app by calling all our init functions.
   this.initApp = function() {
     this.initMap();
     this.initHamburger();
+    this.initDrawingManager();
     this.createMarkers();
 
     // self.landmarkList shows the top five featured landmarks
     self.landmarkList = ko.observableArray([]);
+
+//    self.landmarks = ko.observableArray(landmarks);
+    self.query = ko.observable('');
+
+    /* For more info about self.searchResults, consult this url:
+    http://stackoverflow.com/questions/29667134/knockout-search-in-observable-array */
+    self.searchResults = ko.computed(function() {
+      var q = self.query();
+      return self.landmarkList().filter(function(i) {
+        return i.title.toLowerCase().indexOf(q) >= 0;
+      });
+    });
 
     // self.indexStart/End allows calculation of which landmarks belong in self.landmarkList
     self.indexStart = ko.observable(0);
@@ -136,8 +186,21 @@ var ViewModel = function() {
     for (var i = self.indexStart(); i < self.indexEnd() + 1; i++) {
       self.landmarkList.push(landmarks[i]);
     }
+
+    self.placeMarkers = [];
   };
 
+
+
+/*  this.search = function(value) {
+    self.landmarks.removeAll();
+    self.landmarks.forEach(function(landmark) {
+      if (self.landmarks()[landmark].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+        self.landmarks().push(self.landmarks()[landmark]);
+      }
+    });
+  };
+*/
   // Create a marker for each landmark.
   this.createMarkers = function() {
     landmarks.forEach(function(landmark) {
@@ -185,9 +248,9 @@ var ViewModel = function() {
   };
 
   // Hide all markers on the map
-  this.hideMarkers = function() {
-    for (var i = 0; i < landmarks.length; i++) {
-      landmarks[i].marker.setMap(null);
+  this.hideMarkers = function(markers) {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].marker.setMap(null);
     }
   };
 
@@ -308,8 +371,134 @@ var ViewModel = function() {
     }
   };
 
+  this.toggleDrawing = function() {
+    if (self.drawingManager.map) {
+      self.drawingManager.setMap(null);
+      // In case the user drew anything, get rid of polygon
+      if (self.polygon !== null) {
+        self.polygon.setMap(null);
+      }
+    } else {
+      self.drawingManager.setMap(self.map);
+    }
+  };
+
+  this.searchWithinPolygon = function() {
+    landmarks.forEach(function(landmark) {
+      if (google.maps.geometry.poly.containsLocation(landmark.marker.position, self.polygon)) {
+        landmark.marker.setMap(self.map);
+      } else {
+        landmark.marker.setMap(null);
+      }
+    });
+  };
+
+  this.textSearchPlaces = function() {
+    console.log("textSearchPlaces called");
+    var bounds = self.map.getBounds();
+    self.hideMarkers(self.placeMarkers());
+    var placesService = new google.maps.places.PlacesService(self.map);
+    placesService.textSearch({
+      query: document.getElementById('places-search').value,
+      bounds: bounds
+    }, function(results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        self.createMarkersForPlaces(results);
+      }
+    });
+  };
+
+  this.createMarkersForPlaces = function(places) {
+    console.log("CMFP Called");
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0; i < places.length; i++) {
+      var place = places[i];
+      var icon = {
+        url: place.icon,
+        size: new google.maps.Size(35, 35),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(15, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+      // Create a marker for each place
+      var marker = new google.maps.Marker({
+        map: map,
+        icon: icon,
+        title: place.name,
+        position: place.geometry.location,
+        id: place.place_id
+      });
+      // Create a single infoWindow to be used with the place details information
+      // so that only one is open at once
+      var placeInfoWindow = new google.maps.InfoWindow();
+      // If a marker is clicked, do a place details search on it in the next function
+      marker.addListener('click', function() {
+        if (placeInfoWindow.marker == this) {
+          console.log("This infoWindow already is on this marker!");
+        } else {
+          self.getPlaceDetails(this, placeInfoWindow);
+        }
+      });
+      self.placeMarkers().push(marker);
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    }
+    self.map.fitBounds(bounds);
+  };
+
+  this.getPlaceDetails = function(marker, infoWindow) {
+    console.log("GPD called");
+    var service = new google.maps.places.PlacesService(self.map);
+    service.getDetails({
+      placeId: marker.id
+    }, function(place, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        // Set the marker property on this infoWindow so it isn't created again
+        infoWindow.marker = marker;
+        var innerHTML = '<div>';
+        if (place.name) {
+          innerHTML += '<strong>' + place.name + '</strong>';
+        }
+        if (place.formatted_address) {
+          innerHTML += '<br>' + place.formatted_address;
+        }
+        if (place.formatted_phone_number) {
+          innerHTML += '<br>' + place.formatted_phone_number;
+        }
+        if (place.opening_hours) {
+          innerHTML += '<br><br><strong>Hours:</strong><br>' +
+            place.opening_hours.weekday_text[0] + '<br>' +
+            place.opening_hours.weekday_text[1] + '<br>' +
+            place.opening_hours.weekday_text[2] + '<br>' +
+            place.opening_hours.weekday_text[3] + '<br>' +
+            place.opening_hours.weekday_text[4] + '<br>' +
+            place.opening_hours.weekday_text[5] + '<br>' +
+            place.opening_hours.weekday_text[6];
+          }
+        if (place.photos) {
+          innerHTML += '<br><br><img src="' + place.photos[0].getUrl(
+            {maxHeight: 100, maxWidth: 200}) + '">';
+          }
+        innerHTML += '</div>';
+        infoWindow.setContent(innerHTML);
+        infoWindow.open(self.map, marker);
+        // Make sure the marker property is cleared if the infoWindow is closed
+        infoWindow.addListener('closeclick', function() {
+        infoWindow.marker = null;
+        });
+      }
+    });
+  };
+
+//  this.query.subscribe(self.search);
+
   // Invoke the initialize function.
   this.initApp();
 };
+
 
 ko.applyBindings(new ViewModel());
