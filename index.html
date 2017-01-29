@@ -10,72 +10,44 @@
     <script src="js/dist/knockout-3.4.1.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.tyler.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <title>Google Maps Sandbox</title>
+    <title>Chicago Landmarks</title>
   </head>
-
-<body>
-  <nav class="navbar navbar-static-top" role="navigation">
-    <div class="container nav-container">
-      <div class="navbar-header">
-        <button type="button" id="nav-hamburger" class="navbar-toggle collapsed" data-toggle="slide-collapse" data-target="#navigation">
+  <body>
+    <nav class="navbar navbar-static-top" role="navigation">
+      <div class="container nav-container">
+        <div class="navbar-header">
+          <button type="button" id="nav-hamburger" class="navbar-toggle collapsed" data-toggle="slide-collapse" data-target="#navigation">
             <span class="sr-only">Toggle navigation</span>
             <span class="glyphicon glyphicon-menu-hamburger"></span>
-        </button>
-        <a href="#" class="navbar-brand">
-          Landmark Locater
-        </a>
-        <form role="search" class="navbar-form nav-search" id="searchbar">
-          <div class="nav-search form-group">
-            <input type="text" class="nav-search form-control" id="places-search" placeholder="Search" data-bind="value: $root.query, valueUpdate: 'keyup'" autocomplete="off">
-          </div>
-          <button type="submit" class="btn btn-default search-icon"><span class="nav-search glyphicon glyphicon-search"></span></button>
-        </form>
-      </div>
+          </button>
+          <a href="#" class="navbar-brand">
+            Landmark Locater
+          </a>
+          <form role="search" class="navbar-form nav-search" id="searchbar">
+            <div class="nav-search form-group">
+              <input type="text" class="nav-search form-control" id="places-search" placeholder="Search" data-bind="value: $root.query, valueUpdate: 'keyup'" autocomplete="off">
+            </div>
+          </form>
+        </div>
 
-      <div class="collapse navbar-collapse" id="navigation">
+        <div class="collapse navbar-collapse" id="navigation">
+          <ul class="nav navbar-nav" id="nav-list" data-bind="foreach: searchResults">
+            <li>
+              <a class="nav-item" href="#" data-bind="text: title, click: $root.setAsCurrentMarker"></a>
+            </li>
+          </ul>
+        </div>
+    </nav>
 
-        <button class="btn btn-secondary btn-bigscreen" id="btn-move-left" data-bind="click: moveFeaturedLandmarksLeft">
-          <span class="glyphicon glyphicon-chevron-left"></span>
-        </button>
-        <button class="btn btn-secondary btn-smallscreen" data-bind="click: moveFeaturedLandmarksLeft">
-          <span class="glyphicon glyphicon-menu-up"></span>
-        </button>
+    <div id="map"></div>
 
-        <ul class="nav navbar-nav" id="nav-list" data-bind="foreach: searchResults">
-          <li><a class="nav-item" href="#" data-bind="text: title, click: $root.setAsCurrentMarker"></a></li>
-        </ul>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD12rqNI0xx-o1LXAxtJ-X-Es30h_oS6j4&v=3">
+    </script>
 
-        <button class="btn btn-secondary btn-bigscreen" id="btn-move-right" data-bind="click: moveFeaturedLandmarksRight">
-          <span class="glyphicon glyphicon-chevron-right"></span>
-        </button>
-        <button class="btn btn-secondary btn-smallscreen" data-bind="click: moveFeaturedLandmarksRight">
-          <span class="glyphicon glyphicon-menu-down"></span>
-        </button>
+    <script src="js/src/model.js"></script>
+    <script src="js/src/view.js"></script>
+    <script src="js/src/controller.js"></script>
 
-      </div>
-
-    </div>
-  </nav>
-
-  <div class="navbar navbar-fixed-bottom">
-    <div class="btn-group">
-      <button type="button" class="btn btn-primary" id="show-landmarks" data-bind="click: showLandmarks">Show Landmarks</button>
-      <button type="button" class="btn btn-danger" id="hide-landmarks" data-bind="click: hideMarkers(landmarks)">Hide Landmarks</button>
-      <button type="button" class="btn btn-success" id="hide-landmarks" data-bind="click: toggleDrawing">Custom Search</button>
-    </div>
-  </div>
-
-  <div id="map"></div>
-
-  <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD12rqNI0xx-o1LXAxtJ-X-Es30h_oS6j4&v=3&libraries=places,drawing,geometry">
-  </script>
-
-  <script src="js/src/model.js"></script>
-  <script src="js/src/view.js"></script>
-  <script src="js/src/controller.js"></script>
-
-
-
-</body>
+  </body>
 </html>

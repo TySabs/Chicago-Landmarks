@@ -1,8 +1,6 @@
-var Marker = function(data) {
-
+var Marker = function(data, map) {
   // 'self' keeps 'this' in scope for nested functions
   var self = this;
-
 
   // Create a marker taking in one parameter: a marker color.
   this.makeMarkerIcon = function(markerColor) {
@@ -35,6 +33,18 @@ var Marker = function(data) {
       id: data
     });
 
+  marker.isVisible = ko.observable(false);
+
+  marker.isVisible.subscribe(function(currentState) {
+    if (currentState) {
+      marker.setMap(map);
+    } else {
+      marker.setMap(null);
+    }
+  });
+
+  marker.isVisible(true);
+
   // Set marker color to yellow on mouseover event
   marker.addListener('mouseover', function() {
     this.setIcon(highlightedIcon);
@@ -44,9 +54,5 @@ var Marker = function(data) {
     this.setIcon(defaultIcon);
   });
 
-//  console.log("This:", this);
-//  console.log("Marker:", marker);
-
   return marker;
-
 };
