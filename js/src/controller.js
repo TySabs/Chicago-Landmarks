@@ -113,38 +113,59 @@ var ViewModel = function() {
   };
 
   this.initApp = function() {
+    // this.landmarkList holds all landmarks
     this.landmarkList = ko.observableArray(landmarks);
 
-
+    // this.query holds value of searchbox
     this.query = ko.observable('');
 
+    // Initialize the map
     this.initMap();
+
+    // Initialize Hamburger for the list items on screens with max-width of 768px
     this.initHamburger();
-    this.createMarkers();
+
+    // Initalize all markers
+    this.initMarkers();
 
     /* For more info about self.searchResults, consult this url:
     http://stackoverflow.com/questions/29667134/knockout-search-in-observable-array */
-    this.searchResults = ko.computed(function() {
-    //  var query = self.query();
+    // this.searchResultsForLandmarks is a ko.computed that dynamically displays landmark list items
+    this.searchResultsForLandmarks = ko.computed(function() {
+
+      // self.query() holds value of the searchbox
+      // .toLowerCase() makes search results case insensitive
+      var query = self.query();
 
       return self.landmarkList().filter(function(landmark) {
-        return landmark.title.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
+        return landmark.title.toLowerCase().indexOf(query.toLowerCase()) >= 0;
       });
     });
 
-    this.filterMarkers = ko.computed(function() {
+    /* For more information on how this.filterMarkers, consult this url:
+    http://stackoverflow.com/questions/29557938/removing-map-pin-with-search */
+    // this.searchResultsForMarkers is a ko.computed that dynamically displays map markers
+    this.searchResultsForMarkers = ko.computed(function() {
+
+        // self.query() holds value of the searchbox
+        // .toLowerCase() makes search results case insensitive
         var search  = self.query().toLowerCase();
 
         return ko.utils.arrayFilter(self.landmarkList(), function(landmark) {
+
+          // Set landmark's title to lowercase and do an index of search,
+          // If index can find any results, it will set doesMatch to true,
+          // If index cannot find any results, it will set doesMatch to false
           var doesMatch = landmark.marker.title.toLowerCase().indexOf(search) >= 0;
 
+          // marker will be visible if doesMatch is true, otherwise marker will be hideen
           landmark.marker.isVisible(doesMatch);
 
           return doesMatch;
       });
     });
 
-
+    // Used to display an infoWindow when a marker or list item is clicked by this.setAsCurrentMarker()
     this.currentMarker = ko.observable();
 
     // this.infoWindow changes to display a marker's corresponding infoWindow
@@ -154,9 +175,8 @@ var ViewModel = function() {
   };
 
   // Create a marker for each landmark.
-  this.createMarkers = function() {
+  this.initMarkers = function() {
     var map = self.map;
-    var landmarkList = self.landmarkList();
     var bounds = new google.maps.LatLngBounds();
 
     self.landmarkList().forEach(function(landmark) {
@@ -164,8 +184,10 @@ var ViewModel = function() {
       // Create a new marker property for each landmark
       landmark.marker = new Marker(landmark, map);
 
+      // Display marker by setMap() to map
       landmark.marker.setMap(map);
 
+      // Extend map's bounds to fit current landmark
       bounds.extend(landmark.marker.position);
 
 
@@ -173,32 +195,35 @@ var ViewModel = function() {
       landmark.marker.addListener('click', function() {
         self.setAsCurrentMarker(landmark);
       });
-    }); // End landmarks.forEach()
+    }); // End landmarkList().forEach()
+
+    // Make map's bounds fit all landmarks
     self.map.fitBounds(bounds);
   };
 
-  this.setAsCurrentMarker = function(clickedMarker) {
+  this.setAsCurrentMarker = function(clickedLandmark) {
 
+    // Clear animations for all icons
     self.landmarkList().forEach(function(landmark) {
-      //works landmark.marker.setMap(null);
       landmark.marker.setAnimation(null);
     });
 
-    // Check to make sure clickedMarker is not already selected
-    if (clickedMarker != self.currentMarker()) {
+    // Check to make sure clickedLandmark is not already selected
+    if (clickedLandmark != self.currentMarker()) {
       // Show clickedMarker by setting its map to ViewModel.map
-      clickedMarker.marker.setMap(self.map);
+      clickedLandmark.marker.setMap(self.map);
 
       // Center map on clicked marker
-      self.map.setCenter(clickedMarker.location);
+      self.map.setCenter(clickedLandmark.location);
 
-      clickedMarker.marker.setAnimation(google.maps.Animation.BOUNCE);
+      // Make clickedLandmark's icon bounce
+      clickedLandmark.marker.setAnimation(google.maps.Animation.BOUNCE);
 
-      // Set currentMarker to the clicked landmark's marker
-      self.currentMarker = ko.observable(clickedMarker.marker);
+      // Set currentLandmark to the clicked landmark's marker
+      self.currentLandmark = ko.observable(clickedLandmark.marker);
 
       // Update the infoWindow
-      self.populateInfoWindow(clickedMarker.marker, self.infoWindow());
+      self.populateInfoWindow(clickedLandmark.marker, self.infoWindow());
     }
   };
 
@@ -212,7 +237,10 @@ var ViewModel = function() {
 
       // Make sure marker property is cleared if the infoWindow is closed
       infoWindow.addListener('closeclick', function() {
+        // Close the infoWindow
         infoWindow.marker = null;
+
+        // Turn off marker's animation
         marker.setAnimation(null);
       });
 
@@ -226,6 +254,7 @@ var ViewModel = function() {
           // heading variable controls the initial pitch of streetview
           var heading = google.maps.geometry.spherical.computeHeading(nearStreetViewLocation, marker.position);
 
+          // infoWindow.setContent creates the HTML for the infoWindow
           infoWindow.setContent('<div class="marker-div" data-bind="with: $root.currentMarker"><div class="marker-title">' + marker.title + '</div><div id="pano"></div></div>');
 
           // Set the properties of streetview
@@ -235,7 +264,10 @@ var ViewModel = function() {
               heading: heading,
               pitch: 10
             },
+            // Remove Address Box
             addressControl: false,
+
+            // Remove Compass
             panControl: false
           };
           // Create the streetview panorama that appears in the infoWindow

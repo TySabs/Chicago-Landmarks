@@ -35,6 +35,8 @@ var Marker = function(data, map) {
 
   marker.isVisible = ko.observable(false);
 
+  /* For more information on how this.filterMarkers, consult this url:
+  http://stackoverflow.com/questions/29557938/removing-map-pin-with-search */
   marker.isVisible.subscribe(function(currentState) {
     if (currentState) {
       marker.setMap(map);
