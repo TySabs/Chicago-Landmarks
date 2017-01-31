@@ -283,7 +283,7 @@ var ViewModel = function() {
             '</div>'
           );
 
-          $.ajax({url: 'http://api.wunderground.com/api/6878610c92332316/conditions/q/' +
+          $.ajax({url: 'https://api.wunderground.com/api/6878610c92332316/conditions/q/' +
           landmark.country + '/' + landmark.city + '.json',
             success: function(result) {
             if (result.current_observation.weather === '' || undefined) {
@@ -293,7 +293,7 @@ var ViewModel = function() {
               $('.weather-temperature').html(result.current_observation.temperature_string);
             }},
             error: function() {
-              $('.weather-div').html('Error: Weather failed to load.');
+              $('.weather-conditions').html('Error: Weather failed to load.');
             }
           });
 
