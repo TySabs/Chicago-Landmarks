@@ -229,14 +229,16 @@ var ViewModel = function() {
       self.currentLandmark = ko.observable(clickedLandmark.marker);
 
       // Update the infoWindow
-      self.populateInfoWindow(clickedLandmark.marker, self.infoWindow());
+      self.populateInfoWindow(clickedLandmark, self.infoWindow());
     }
   };
 
 
 
-  this.populateInfoWindow = function(marker, infoWindow) {
-    // First check to make sure infoWindow is not already opened on this marker
+  this.populateInfoWindow = function(landmark, infoWindow) {
+    var marker = landmark.marker;
+
+    // Check to make sure infoWindow is not already opened on this marker
     if (infoWindow.marker != marker) {
       infoWindow.setContent('');
       infoWindow.marker = marker;
@@ -254,6 +256,7 @@ var ViewModel = function() {
       // image, then calculate the heading, then get a panorama from that and
       // set the options
       function getStreetView(data, status) {
+
         if (status == google.maps.StreetViewStatus.OK) {
           var nearStreetViewLocation = data.location.latLng;
 
@@ -280,13 +283,17 @@ var ViewModel = function() {
             '</div>'
           );
 
-          $.ajax({url: "http://api.wunderground.com/api/6878610c92332316/conditions/q/IL/Chicago.json",
+          $.ajax({url: 'http://api.wunderground.com/api/6878610c92332316/conditions/q/' +
+          landmark.country + '/' + landmark.city + '.json',
             success: function(result) {
-            $('.weather-conditions').html(result.current_observation.weather);
-            $('.weather-temperature').html(result.current_observation.temperature_string);
-            },
+            if (result.current_observation.weather === '' || undefined) {
+              $('.weather-conditions').html('Error: Weather currently unavailable.');
+            } else {
+              $('.weather-conditions').html(result.current_observation.weather);
+              $('.weather-temperature').html(result.current_observation.temperature_string);
+            }},
             error: function() {
-              $('.weather-div').html('Error: Weather information could not be loaded at this time.');
+              $('.weather-div').html('Error: Weather failed to load.');
             }
           });
 

@@ -34,7 +34,7 @@ body {
   background: #FFF;
 }
 
-@media screen and (max-width: 767px) {
+@media (max-width: 767px) {
   .navbar-brand {
     display: none;
   }
@@ -49,7 +49,7 @@ body {
   box-shadow: none;
 }
 
-@media screen and (max-width: 767px) {
+@media (max-width: 767px) {
   .navbar-collapse {
     font-size: 12px;
     position: fixed;
@@ -78,7 +78,7 @@ body {
   margin-left: 10px;
 }
 
-@media screen and (max-width: 1050px) and (min-width: 768px) {
+@media (max-width: 1050px) and (min-width: 768px) {
   .nav-item {
     margin-left: 0;
     padding: 15px 5px;
@@ -102,7 +102,7 @@ body {
   color: #FFF;
 }
 
-@media screen and (min-width: 768px) {
+@media (min-width: 768px) {
   .btn-bigscreen {
     display: inline;
   }
@@ -112,7 +112,7 @@ body {
   }
 }
 
-@media screen and (max-width: 767px) {
+@media (max-width: 767px) {
   .btn-bigscreen {
     display: none;
   }
@@ -132,13 +132,13 @@ body {
   box-shadow: none;
 }
 
-@media screen and (min-width: 768px) {
+@media (min-width: 768px) {
   #searchbar {
     margin-top: 10px;
   }
 }
 
-@media screen and (max-width: 767px) {
+@media (max-width: 767px) {
   .nav-search {
     float: left;
     margin: 0 2px 8px 2px;
@@ -159,26 +159,32 @@ body {
   width: 100%;
 }
 /*
-@media screen and (min-width: 1050px) {
+@media (min-width: 1050px) {
   #map {
     margin-top: 0;
   }
 }
 */
-@media screen and (min-width: 768px) {
+@media (min-width: 768px) {
   #map {
     margin-top: 60px;
     height: 84%;
   }
 }
+
+@media (max-width: 400px) {
+  #map {
+    height: 88%;
+  }
+}
 /*
-@media screen and (max-width: 767px) {
+@media (max-width: 767px) {
   #map {
     height: 500px;
   }
 }
 
-@media screen and (max-width: 500px) {
+@media (max-width: 500px) {
   #map {
     height: 300px;
   }
