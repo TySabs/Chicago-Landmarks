@@ -1,0 +1,28 @@
+{
+  "name": "landmark-locater",
+  "version": "1.0.0",
+  "description": "A map application used for displaying popular landmarks.",
+  "main": "gulpfile.js",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-uglify": "^2.0.1",
+    "gulp-clean-css": "^2.3.2",
+    "gulp-util": "^3.0.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TySabs/Chicago-Landmarks.git"
+  },
+  "keywords": [
+    "Landmark",
+    "Locater"
+  ],
+  "author": "Ty Sabs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TySabs/Chicago-Landmarks/issues"
+  },
+  "homepage": "https://github.com/TySabs/Chicago-Landmarks#readme"
+}

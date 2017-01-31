@@ -126,8 +126,6 @@ body {
   }
 }
 
-
-
 #searchbar {
   float: left;
   border: none;
@@ -196,13 +194,24 @@ body {
 
 /* Info Window Styles */
 
+.marker-title {
+  text-align: center;
+  margin: 0 0 2px 0;
+  font-size: 13px;
+  font-weight: 800;
+}
+
 #pano {
   width: 200px;
   height: 200px;
 }
 
-.marker-title {
-  text-align: center;
-  margin-bottom: 2px;
-  font-weight: 800;
+.weather-conditions, .weather-temperature {
+  display: inline-block;
+  font-size: 12px;
+  margin: 6px 0 0 0;
+}
+
+.weather-conditions {
+  margin-right: 8px;
 }

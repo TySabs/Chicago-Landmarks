@@ -172,6 +172,12 @@ var ViewModel = function() {
     var largeInfoWindow = new google.maps.InfoWindow();
     this.infoWindow = ko.observable(largeInfoWindow);
 
+    this.infoWindowState = ko.observable('IL');
+    this.infoWindowCity = ko.observable('Chicago');
+
+    this.weatherConditions = ko.observable('');
+    this.weatherTemperature = ko.observable('');
+
   };
 
   // Create a marker for each landmark.
@@ -254,8 +260,35 @@ var ViewModel = function() {
           // heading variable controls the initial pitch of streetview
           var heading = google.maps.geometry.spherical.computeHeading(nearStreetViewLocation, marker.position);
 
+          var weatherData = '%data%';
+          // weatherConditions variable displays landmark's weather conditions in the infoWindow
+          var weatherConditions = '<h3 class="weather-conditions"></h3>';
+          // weatherTemperature variable displays landmark's temperature in the infoWindow
+          var weatherTemperature = '<h3 class="weather-temperature"></h3>';
+
+
+
           // infoWindow.setContent creates the HTML for the infoWindow
-          infoWindow.setContent('<div class="marker-div" data-bind="with: $root.currentMarker"><div class="marker-title">' + marker.title + '</div><div id="pano"></div></div>');
+          infoWindow.setContent(
+            '<div class="marker-div" data-bind="with: $root.currentMarker">' +
+              '<h2 class="marker-title">' + marker.title + '</h2>' +
+              '<div id="pano"></div>' +
+              '<div class="weather-div">' +
+                weatherConditions +
+                weatherTemperature +
+              '</div>' +
+            '</div>'
+          );
+
+          $.ajax({url: "http://api.wunderground.com/api/6878610c92332316/conditions/q/IL/Chicago.json",
+            success: function(result) {
+            $('.weather-conditions').html(result.current_observation.weather);
+            $('.weather-temperature').html(result.current_observation.temperature_string);
+            },
+            error: function() {
+              $('.weather-div').html('Error: Weather information could not be loaded at this time.');
+            }
+          });
 
           // Set the properties of streetview
           var panoramaOptions = {
