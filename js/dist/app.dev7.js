@@ -357,13 +357,12 @@ var ViewModel = function() {
           // heading variable controls the initial pitch of streetview
           var heading = google.maps.geometry.spherical.computeHeading(nearStreetViewLocation, marker.position);
 
-          var weatherData = '%data%';
           // weatherConditions variable displays landmark's weather conditions in the infoWindow
           var weatherConditions = '<h3 class="weather-conditions"></h3>';
           // weatherTemperature variable displays landmark's temperature in the infoWindow
           var weatherTemperature = '<h3 class="weather-temperature"></h3>';
-
-
+          //weatherCredits variable displays attribution for wunderground API
+          var weatherCredits = '<h4 class="weather-credits">Weather provided by Weather Underground</h4>'
 
           // infoWindow.setContent creates the HTML for the infoWindow
           infoWindow.setContent(
@@ -385,13 +384,16 @@ var ViewModel = function() {
           $.ajax({
             url: wundergroundLink,
             success: function(result) {
+            // Error handling for when API returns blank information
             if (result.current_observation.weather === '' || undefined) {
               $('.weather-conditions').html('Error: Weather currently unavailable.');
             } else {
+              // Insert weather conditions and temperature to infoWindow if no errors occur
               var currentConditions = result.current_observation.weather + " - ";
               $('.weather-conditions').html(currentConditions);
               $('.weather-temperature').html(result.current_observation.temperature_string);
             }},
+            // Error handling for when weather data fails to load
             error: function() {
               $('.weather-conditions').html('Error: Weather failed to load.');
             }

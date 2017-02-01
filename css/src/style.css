@@ -6,14 +6,23 @@ body {
   height: 100%;
 }
 
+
+
 .navbar, .navbar-header {
   background: #424242;
   margin: 0;
   height: 50px;
+  width: 100;
+}
+
+.navbar.navbar-fixed-bottom {
+  min-height: 20px;
+  height: 20px;
 }
 
 .navbar-header {
   margin-left: 12px;
+  width: 100%;
 }
 
 .navbar-toggle {
@@ -155,41 +164,23 @@ body {
 #map {
   position: absolute;
   margin: 16px 0 0 0;
-  height: 90%;
+  height: 88%;
   width: 100%;
 }
-/*
-@media (min-width: 1050px) {
-  #map {
-    margin-top: 0;
-  }
-}
-*/
+
 @media (min-width: 768px) {
   #map {
     margin-top: 60px;
-    height: 84%;
+    height: 82%;
   }
 }
 
 @media (max-width: 400px) {
   #map {
-    height: 88%;
-  }
-}
-/*
-@media (max-width: 767px) {
-  #map {
-    height: 500px;
+    height: 82%;
   }
 }
 
-@media (max-width: 500px) {
-  #map {
-    height: 300px;
-  }
-}
-*/
 #show-landmarks {
   margin: 10px auto 10px 20px;
 }
@@ -244,4 +235,14 @@ body {
   .weather-conditions, .weather-temperature {
     font-size: 14px;
   }
+}
+
+#weather-credits {
+  font-size: 10px;
+  padding: 4px 0;
+  margin: 0 6px 0 12px;
+  color: #bbb;
+  z-index: 1030;
+  position: fixed;
+  height: 20px;
 }

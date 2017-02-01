@@ -8,43 +8,51 @@
     <script src="js/dist/jquery-3.1.1.min.js"></script>
     <script src="js/dist/bootstrap.min.js"></script>
     <script src="js/dist/knockout-3.4.1.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/dist/liveStyles.min6.css">
+    <link rel="stylesheet" type="text/css" href="css/dist/liveStyles.min7.css">
     <title>Wonders of the World</title>
   </head>
   <body>
-    <nav class="navbar navbar-static-top" role="navigation">
-      <div class="container nav-container">
-        <div class="navbar-header">
-          <button type="button" id="nav-hamburger" class="navbar-toggle collapsed" data-toggle="slide-collapse" data-target="#navigation">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="glyphicon glyphicon-menu-hamburger"></span>
-          </button>
-          <a href="#" class="navbar-brand">
-            Wonders of the World
-          </a>
-          <form role="search" class="navbar-form nav-search" id="searchbar">
-            <div class="nav-search form-group">
-              <input type="text" class="nav-search form-control" id="places-search" placeholder="Search" data-bind="value: $root.query, valueUpdate: 'keyup'" autocomplete="off">
-            </div>
-          </form>
-        </div>
+    <header>
+      <nav class="navbar navbar-static-top" role="navigation">
+        <div class="container nav-container">
+          <div class="navbar-header">
+            <button type="button" id="nav-hamburger" class="navbar-toggle collapsed" data-toggle="slide-collapse" data-target="#navigation">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="glyphicon glyphicon-menu-hamburger"></span>
+            </button>
+            <a href="#" class="navbar-brand">
+              Wonders of the World
+            </a>
+            <form role="search" class="navbar-form nav-search" id="searchbar">
+              <div class="nav-search form-group">
+                <input type="text" class="nav-search form-control" id="places-search" placeholder="Search" data-bind="value: $root.query, valueUpdate: 'keyup'" autocomplete="off">
+              </div>
+            </form>
+          </div>
 
-        <div class="collapse navbar-collapse" id="navigation">
-          <ul class="nav navbar-nav" id="nav-list" data-bind="foreach: searchResultsForLandmarks">
-            <li>
-              <a class="nav-item" href="#" data-bind="text: title, click: $root.setAsCurrentMarker"></a>
-            </li>
-          </ul>
-        </div>
-    </nav>
+          <div class="collapse navbar-collapse" id="navigation">
+            <ul class="nav navbar-nav" id="nav-list" data-bind="foreach: searchResultsForLandmarks">
+              <li>
+                <a class="nav-item" href="#" data-bind="text: title, click: $root.setAsCurrentMarker"></a>
+              </li>
+            </ul>
+          </div>
+      </nav>
+    </header>
 
-    <div id="map"></div>
+    <main>
+      <div id="map"></div>
+    </main>
+
+    <footer class="navbar navbar-fixed-bottom">
+      <h4 id="weather-credits">Weather provided by Weather Underground</h4>
+    </footer>
 
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD12rqNI0xx-o1LXAxtJ-X-Es30h_oS6j4&v=3">
     </script>
 
-    <script src="js/dist/app.min6.js"></script>
+    <script src="js/dist/app.min7.js"></script>
 
   </body>
 </html>
