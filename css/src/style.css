@@ -199,25 +199,35 @@ body {
 }
 
 /* Info Window Styles */
-
+@media (min-width: 768px) {
+  .marker-div {
+    width: 500px;
+    height: 500px;
+  }
+}
 .marker-title {
   text-align: center;
   margin: 0 0 2px 0;
-  font-size: 13px;
+  font-size: 18px;
   font-weight: 800;
 }
 
 #pano {
-  width: 200px;
-  height: 200px;
+  width: 96%;
+  height: 90%;
+  margin-left: 20px;
 }
 
 .weather-conditions, .weather-temperature {
   display: inline-block;
-  font-size: 12px;
+  font-size: 20px;
+}
+
+.weather-temperature {
   margin: 6px 0 0 0;
+  font-weight: 400;
 }
 
 .weather-conditions {
-  margin-right: 8px;
+  margin: 6px 10px 0 28%;
 }

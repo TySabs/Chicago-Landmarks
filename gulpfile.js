@@ -4,9 +4,36 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     cleanCSS = require('gulp-clean-css');
 
+var jsSources = [
+  'js/src/model.js',
+  'js/src/view.js',
+  'js/src/controller.js'
+];
 
-gulp.task('minify-css', function() {
-  return gulp.src('css/src/*.css')
+var cssSources = [
+  'css/src/bootstrap.tyler.css',
+  'css/src/style.css'
+];
+
+gulp.task('devJs', function() {
+  gulp.src(jsSources)
+    .pipe(concat('app.dev2.js'))
+    .pipe(gulp.dest('js/dist/'))
+});
+
+gulp.task('liveJs', function() {
+  gulp.src(jsSources)
+    .pipe(concat('app.min2.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('js/dist/'))
+});
+
+
+gulp.task('minCss', function() {
+  gulp.src(cssSources)
+    .pipe(concat('liveStyles.min2.css'))
     .pipe(cleanCSS())
     .pipe(gulp.dest('css/dist'));
 });
+
+gulp.task('default', ['devJs', 'liveJs', 'minCss']);
