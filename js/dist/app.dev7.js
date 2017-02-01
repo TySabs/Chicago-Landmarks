@@ -249,13 +249,6 @@ var ViewModel = function() {
     // this.infoWindow changes to display a marker's corresponding infoWindow
     var largeInfoWindow = new google.maps.InfoWindow();
     this.infoWindow = ko.observable(largeInfoWindow);
-
-    this.infoWindowState = ko.observable('IL');
-    this.infoWindowCity = ko.observable('Chicago');
-
-    this.weatherConditions = ko.observable('');
-    this.weatherTemperature = ko.observable('');
-
   };
 
   // Create a marker for each landmark.
@@ -298,8 +291,10 @@ var ViewModel = function() {
       clickedLandmark.marker.setMap(self.map);
 
       var clickedLandmarkLng = clickedLandmark.location.lng;
-
       var clickedLandmarkLat = clickedLandmark.location.lat;
+
+      // Conditional sets formattedLandmarkLat according to landmark's height on the map
+      // This allows the entire infoWindow to be properly displayed
       if (clickedLandmarkLat > 46) {
         var formattedLandmarkLat = 82;
       } else if (clickedLandmarkLat > 40) {
@@ -312,7 +307,9 @@ var ViewModel = function() {
         var formattedLandmarkLat = clickedLandmarkLat + 74;
       }
 
+      // currentLandmarkLocation allows map to be centered properly
       var currentLandmarkLocation = {lat: formattedLandmarkLat, lng: clickedLandmarkLng};
+
       // Center map on clicked marker
       self.map.setCenter(currentLandmarkLocation);
 
