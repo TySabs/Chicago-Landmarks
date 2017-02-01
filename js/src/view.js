@@ -15,9 +15,9 @@ var Marker = function(data, map) {
   };
 
   // position is an object holding lat/lng
-  this.position = ko.observable(data.location);
+  this.position = data.location;
   // title is a string holding name of location
-  this.title = ko.observable(data.title);
+  this.title = data.title;
 
   // Default Icon color is Red
   var defaultIcon = this.makeMarkerIcon('FF0000');
@@ -26,8 +26,8 @@ var Marker = function(data, map) {
 
   // Create the marker.
   var marker = new google.maps.Marker({
-      position: self.position(),
-      title: self.title(),
+      position: self.position,
+      title: self.title,
       animation: google.maps.Animation.DROP,
       icon: defaultIcon,
       id: data
@@ -39,9 +39,9 @@ var Marker = function(data, map) {
   http://stackoverflow.com/questions/29557938/removing-map-pin-with-search */
   marker.isVisible.subscribe(function(currentState) {
     if (currentState) {
-      marker.setMap(map);
+      marker.setVisible(true);
     } else {
-      marker.setMap(null);
+      marker.setVisible(false);
     }
   });
 

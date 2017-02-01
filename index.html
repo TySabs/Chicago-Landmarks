@@ -16,7 +16,7 @@
       <nav class="navbar navbar-static-top" role="navigation">
         <div class="container nav-container">
           <div class="navbar-header">
-            <button type="button" id="nav-hamburger" class="navbar-toggle collapsed" data-toggle="slide-collapse" data-target="#navigation">
+            <button type="button" id="nav-hamburger" class="navbar-toggle collapsed" data-bind="click: toggleHamburger">
               <span class="sr-only">Toggle navigation</span>
               <span class="glyphicon glyphicon-menu-hamburger"></span>
             </button>
@@ -25,7 +25,7 @@
             </a>
             <form role="search" class="navbar-form nav-search" id="searchbar">
               <div class="nav-search form-group">
-                <input type="text" class="nav-search form-control" id="places-search" placeholder="Search" data-bind="value: $root.query, valueUpdate: 'keyup'" autocomplete="off">
+                <input type="text" class="nav-search form-control" id="places-search" placeholder="Search" data-bind="value: $root.query, valueUpdate: 'keyup'" autocomplete="on">
               </div>
             </form>
           </div>
@@ -52,7 +52,11 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD12rqNI0xx-o1LXAxtJ-X-Es30h_oS6j4&v=3">
     </script>
 
-    <script src="js/dist/app.min7.js"></script>
+<!--    <script src="js/dist/app.min7.js"></script> -->
+
+    <script src="js/src/model.js"></script>
+    <script src="js/src/view.js"></script>
+    <script src="js/src/controller.js"></script>
 
   </body>
 </html>

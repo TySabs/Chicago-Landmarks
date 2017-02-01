@@ -104,14 +104,6 @@ var ViewModel = function() {
     });
   }; // End initMap()
 
-  // Initialize the slide functionality of the hamburger toggle button.
-  this.initHamburger = function() {
-    $('#nav-hamburger').on('click', function() {
-      var $slider = $($(this).data('target'));
-      $slider.animate({'width':'toggle'}, 350);
-    });
-  };
-
   this.initApp = function() {
     // this.landmarkList holds all landmarks
     this.landmarkList = ko.observableArray(landmarks);
@@ -122,8 +114,6 @@ var ViewModel = function() {
     // Initialize the map
     this.initMap();
 
-    // Initialize Hamburger for the list items on screens with max-width of 768px
-    this.initHamburger();
 
     // Initalize all markers
     this.initMarkers();
@@ -168,9 +158,8 @@ var ViewModel = function() {
     // Used to display an infoWindow when a marker or list item is clicked by this.setAsCurrentMarker()
     this.currentMarker = ko.observable();
 
-    // this.infoWindow changes to display a marker's corresponding infoWindow
-    var largeInfoWindow = new google.maps.InfoWindow();
-    this.infoWindow = ko.observable(largeInfoWindow);
+    // largeInfoWindow changes to display a marker's corresponding infoWindow
+    this.infoWindow = new google.maps.InfoWindow();
   };
 
   // Create a marker for each landmark.
@@ -242,7 +231,7 @@ var ViewModel = function() {
       self.currentLandmark = ko.observable(clickedLandmark.marker);
 
       // Update the infoWindow
-      self.populateInfoWindow(clickedLandmark, self.infoWindow());
+      self.populateInfoWindow(clickedLandmark, self.infoWindow);
     }
   };
 
@@ -346,6 +335,11 @@ var ViewModel = function() {
       // Open the infoWindow on the correct marker
       infoWindow.open(self.map, marker);
     }
+  };
+
+  // Show/Hide list items on screens with max-width of 768px
+  this.toggleHamburger = function() {
+    $('#nav-list').animate({'width':'toggle'}, 350);
   };
 
   // Invoke the initialize function.
