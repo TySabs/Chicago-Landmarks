@@ -223,9 +223,9 @@ var ViewModel = function() {
 
       var clickedLandmarkLat = clickedLandmark.location.lat;
       if (clickedLandmarkLat > 46) {
-        var formattedLandmarkLat = 76;
+        var formattedLandmarkLat = 84;
       } else if (clickedLandmarkLat > 40) {
-        var formattedLandmarkLat = clickedLandmarkLat + 32;
+        var formattedLandmarkLat = clickedLandmarkLat + 38;
       } else if (clickedLandmarkLat > 20) {
         var formattedLandmarkLat = clickedLandmarkLat + 42;
       } else if (clickedLandmarkLat > -10) {
