@@ -199,12 +199,7 @@ body {
 }
 
 /* Info Window Styles */
-@media (min-width: 768px) {
-  .marker-div {
-    width: 500px;
-    height: 500px;
-  }
-}
+
 .marker-title {
   text-align: center;
   margin: 0 0 2px 0;
@@ -213,9 +208,23 @@ body {
 }
 
 #pano {
-  width: 96%;
-  height: 90%;
+  width: 200px;
+  height: 200px;
   margin-left: 20px;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  #pano {
+    width: 500px;
+    height: 360px;
+  }
+}
+
+@media (min-width: 1200px) {
+  #pano {
+    width: 500px;
+    height: 480px;
+  }
 }
 
 .weather-conditions, .weather-temperature {
