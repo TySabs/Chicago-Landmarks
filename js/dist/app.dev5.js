@@ -301,15 +301,15 @@ var ViewModel = function() {
 
       var clickedLandmarkLat = clickedLandmark.location.lat;
       if (clickedLandmarkLat > 46) {
-        var formattedLandmarkLat = 89;
+        var formattedLandmarkLat = 72;
       } else if (clickedLandmarkLat > 40) {
-        var formattedLandmarkLat = clickedLandmarkLat + 41;
+        var formattedLandmarkLat = clickedLandmarkLat + 28;
       } else if (clickedLandmarkLat > 20) {
-        var formattedLandmarkLat = clickedLandmarkLat + 54;
+        var formattedLandmarkLat = clickedLandmarkLat + 39;
       } else if (clickedLandmarkLat > -10) {
-        var formattedLandmarkLat = clickedLandmarkLat + 68;
+        var formattedLandmarkLat = clickedLandmarkLat + 53;
       } else {
-        var formattedLandmarkLat = clickedLandmarkLat + 90;
+        var formattedLandmarkLat = clickedLandmarkLat + 74;
       }
 
       var currentLandmarkLocation = {lat: formattedLandmarkLat, lng: clickedLandmarkLng};
