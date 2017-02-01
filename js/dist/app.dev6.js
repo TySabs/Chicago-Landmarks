@@ -175,7 +175,7 @@ var ViewModel = function() {
         ]
       }];
     self.map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 41.8789, lng: -87.6359},
+      center: {lat: 0, lng: 0},
       styles: paleDawnStyles,
       zoom: 12,
       mapTypeControl: false
@@ -301,9 +301,9 @@ var ViewModel = function() {
 
       var clickedLandmarkLat = clickedLandmark.location.lat;
       if (clickedLandmarkLat > 46) {
-        var formattedLandmarkLat = 76;
+        var formattedLandmarkLat = 82;
       } else if (clickedLandmarkLat > 40) {
-        var formattedLandmarkLat = clickedLandmarkLat + 32;
+        var formattedLandmarkLat = clickedLandmarkLat + 38;
       } else if (clickedLandmarkLat > 20) {
         var formattedLandmarkLat = clickedLandmarkLat + 42;
       } else if (clickedLandmarkLat > -10) {
