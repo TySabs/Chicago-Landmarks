@@ -17,13 +17,13 @@ var cssSources = [
 
 gulp.task('devJs', function() {
   gulp.src(jsSources)
-    .pipe(concat('app.dev3.js'))
+    .pipe(concat('app.dev5.js'))
     .pipe(gulp.dest('js/dist/'))
 });
 
 gulp.task('liveJs', function() {
   gulp.src(jsSources)
-    .pipe(concat('app.min3.js'))
+    .pipe(concat('app.min5.js'))
     .pipe(uglify())
     .pipe(gulp.dest('js/dist/'))
 });
@@ -31,7 +31,7 @@ gulp.task('liveJs', function() {
 
 gulp.task('minCss', function() {
   gulp.src(cssSources)
-    .pipe(concat('liveStyles.min3.css'))
+    .pipe(concat('liveStyles.min5.css'))
     .pipe(cleanCSS())
     .pipe(gulp.dest('css/dist'));
 });

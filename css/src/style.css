@@ -203,8 +203,14 @@ body {
 .marker-title {
   text-align: center;
   margin: 0 0 2px 0;
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 800;
+}
+
+@media (min-width: 768px) {
+  .marker-title {
+    font-size: 16px;
+  }
 }
 
 #pano {
@@ -213,23 +219,16 @@ body {
   margin-left: 20px;
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
+@media (min-width: 768px) {
   #pano {
-    width: 500px;
-    height: 360px;
-  }
-}
-
-@media (min-width: 1200px) {
-  #pano {
-    width: 500px;
-    height: 480px;
+    width: 320px;
+    height: 320px;
   }
 }
 
 .weather-conditions, .weather-temperature {
   display: inline-block;
-  font-size: 20px;
+  font-size: 12px;
 }
 
 .weather-temperature {
@@ -238,5 +237,11 @@ body {
 }
 
 .weather-conditions {
-  margin: 6px 10px 0 28%;
+  margin: 6px 4px 0 22%;
+}
+
+@media (min-width: 768px) {
+  .weather-conditions, .weather-temperature {
+    font-size: 14px;
+  }
 }
