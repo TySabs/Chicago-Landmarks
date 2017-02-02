@@ -205,9 +205,9 @@ var ViewModel = function() {
       // Show clickedMarker by setting its map to ViewModel.map
       clickedLandmark.marker.setMap(self.map);
 
-      var clickedLandmarkLng = clickedLandmark.location.lng;
-      var clickedLandmarkLat = clickedLandmark.location.lat;
-      var formattedLandmarkLat;
+      var clickedLandmarkLng = clickedLandmark.location.lng, // lng = east/west
+          clickedLandmarkLat = clickedLandmark.location.lat, // lat = north
+          formattedLandmarkLat;
 
       // Conditional sets formattedLandmarkLat according to landmark's height on the map
       // This allows the entire infoWindow to be properly displayed
@@ -307,14 +307,17 @@ var ViewModel = function() {
           var nearStreetViewLocation = data.location.latLng;
 
           // heading variable controls the initial pitch of streetview
-          var heading = google.maps.geometry.spherical.computeHeading(nearStreetViewLocation, marker.position);
+          var heading = landmark.heading,
+              pitch = landmark.pitch,
+              zoom = landmark.zoom;
 
           // Set the properties of streetview
           var panoramaOptions = {
             position: nearStreetViewLocation,
             pov: {
               heading: heading,
-              pitch: 10
+              pitch: pitch,
+              zoom: zoom
             },
             // Remove Address Box
             addressControl: false,

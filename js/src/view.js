@@ -19,7 +19,6 @@ var Marker = function(data, map) {
       icon: defaultIcon,
       id: data
     });
-
   marker.weatherConditions = ko.observable();
   marker.weatherTemperature = ko.observable();
 
