@@ -130,7 +130,7 @@ var ViewModel = function() {
       return self.landmarkList().filter(function(landmark) {
         return landmark.title.toLowerCase().indexOf(query.toLowerCase()) >= 0;
       });
-    });
+    }); // End this.searchResultsForLandmarks
 
     /* For more information on how this.filterMarkers, consult this url:
     http://stackoverflow.com/questions/29557938/removing-map-pin-with-search */
@@ -153,14 +153,14 @@ var ViewModel = function() {
 
           return doesMatch;
       });
-    });
+    }); // End this.searchResultsForMarkers()
 
     // Used to display an infoWindow when a marker or list item is clicked by this.setAsCurrentMarker()
     this.currentMarker = ko.observable();
 
     // largeInfoWindow changes to display a marker's corresponding infoWindow
     this.infoWindow = new google.maps.InfoWindow();
-  };
+  }; // End initApp()
 
   // Create a marker for each landmark.
   this.initMarkers = function() {
@@ -175,9 +175,13 @@ var ViewModel = function() {
       // Display marker by setMap() to map
       landmark.marker.setMap(map);
 
-      // Extend map's bounds to fit current landmark
+      // Extend map's bounds to fit current landmark on initialize
       bounds.extend(landmark.marker.position);
 
+      // Extend map's bounds to fit current landmark on resize
+      google.maps.event.addDomListener(window, 'resize', function() {
+        map.fitBounds(bounds);
+      });
 
       // Add a click handler to each mark which calls self.setAsCurrentMarker
       landmark.marker.addListener('click', function() {
@@ -187,7 +191,7 @@ var ViewModel = function() {
 
     // Make map's bounds fit all landmarks
     self.map.fitBounds(bounds);
-  };
+  }; // End initMarkers()
 
   this.setAsCurrentMarker = function(clickedLandmark) {
 
@@ -233,7 +237,7 @@ var ViewModel = function() {
       // Update the infoWindow
       self.populateInfoWindow(clickedLandmark, self.infoWindow);
     }
-  };
+  }; // End setAsCurrentMarker()
 
 
 
@@ -254,6 +258,45 @@ var ViewModel = function() {
         marker.setAnimation(null);
       });
 
+      // infoWindow.setContent creates the HTML for the infoWindow
+      infoWindow.setContent(
+        '<div class="marker-div">' +
+          '<h2 class="marker-title">' + marker.title + '</h2>' +
+          '<div id="pano" data-bind=""></div>' +
+          '<div class="weather-div">' +
+            '<h3 class="weather-conditions"></h3>' +
+            '<h3 class="weather-temperature"></h3>' +
+          '</div>' +
+        '</div>'
+      );
+
+      // weatherConditions variable displays landmark's weather conditions in the infoWindow
+      var weatherConditions = '<h3 class="weather-conditions"></h3>';
+      // weatherTemperature variable displays landmark's temperature in the infoWindow
+      var weatherTemperature = '<h3 class="weather-temperature"></h3>';
+
+      // Link for weather underground API
+      var wundergroundLink = 'https://api.wunderground.com/api/6878610c92332316/conditions/q/' +
+      landmark.country + '/' + landmark.city + '.json';
+
+      // Pulls weather conditions and temperature for current landmark
+      $.ajax({
+        url: wundergroundLink,
+        success: function(result) {
+        // Error handling for when API returns blank information
+        if (result.current_observation.weather === '' || undefined) {
+          $('.weather-conditions').html('Error: Weather currently unavailable.');
+        } else {
+          // Insert weather conditions and temperature to infoWindow if no errors occur
+          $('.weather-conditions').html(result.current_observation.weather);
+          $('.weather-temperature').html(result.current_observation.temperature_string);
+        }},
+        // Error handling for when weather data fails to load
+        error: function() {
+          $('.weather-conditions').html('Error: Weather failed to load.');
+        }
+      });
+
       // If status is OK, which means pano was found, compute the position of streetView
       // image, then calculate the heading, then get a panorama from that and
       // set the options
@@ -264,48 +307,6 @@ var ViewModel = function() {
 
           // heading variable controls the initial pitch of streetview
           var heading = google.maps.geometry.spherical.computeHeading(nearStreetViewLocation, marker.position);
-
-          // weatherConditions variable displays landmark's weather conditions in the infoWindow
-          var weatherConditions = '<h3 class="weather-conditions"></h3>';
-          // weatherTemperature variable displays landmark's temperature in the infoWindow
-          var weatherTemperature = '<h3 class="weather-temperature"></h3>';
-          //weatherCredits variable displays attribution for wunderground API
-          var weatherCredits = '<h4 class="weather-credits">Weather provided by Weather Underground</h4>'
-
-          // infoWindow.setContent creates the HTML for the infoWindow
-          infoWindow.setContent(
-            '<div class="marker-div" data-bind="with: $root.currentMarker">' +
-              '<h2 class="marker-title">' + marker.title + '</h2>' +
-              '<div id="pano"></div>' +
-              '<div class="weather-div">' +
-                weatherConditions +
-                weatherTemperature +
-              '</div>' +
-            '</div>'
-          );
-
-          // Link for weather underground API
-          var wundergroundLink = 'https://api.wunderground.com/api/6878610c92332316/conditions/q/' +
-          landmark.country + '/' + landmark.city + '.json';
-
-          // Pulls weather conditions and temperature for current landmark
-          $.ajax({
-            url: wundergroundLink,
-            success: function(result) {
-            // Error handling for when API returns blank information
-            if (result.current_observation.weather === '' || undefined) {
-              $('.weather-conditions').html('Error: Weather currently unavailable.');
-            } else {
-              // Insert weather conditions and temperature to infoWindow if no errors occur
-              var currentConditions = result.current_observation.weather + " - ";
-              $('.weather-conditions').html(currentConditions);
-              $('.weather-temperature').html(result.current_observation.temperature_string);
-            }},
-            // Error handling for when weather data fails to load
-            error: function() {
-              $('.weather-conditions').html('Error: Weather failed to load.');
-            }
-          });
 
           // Set the properties of streetview
           var panoramaOptions = {
@@ -323,19 +324,20 @@ var ViewModel = function() {
           // Create the streetview panorama that appears in the infoWindow
           var panorama = new google.maps.StreetViewPanorama(document.getElementById('pano'), panoramaOptions);
         } else {
-          infoWindow.setContent('<div>' + marker.title + '</div>' + '<div>No Street View Found</div>');
+          $('#pano').html('Error: No street view found.');
         }
-      }
+      } // End getStreetView()
 
       var streetViewService = new google.maps.StreetViewService();
       var radius = 50;
       // Use streetview service to get closest streetview image within
       // 50 meters of the markers position
       streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+
       // Open the infoWindow on the correct marker
       infoWindow.open(self.map, marker);
-    }
-  };
+    } // End Conditional
+  }; // End populateInfoWindow()
 
   // Show/Hide list items on screens with max-width of 768px
   this.toggleHamburger = function() {
@@ -346,4 +348,16 @@ var ViewModel = function() {
   this.initApp();
 };
 
-ko.applyBindings(new ViewModel());
+// Google maps url
+var mapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD12rqNI0xx-o1LXAxtJ-X-Es30h_oS6j4&v=3";
+
+/* For more info about how $.getScript works, consult this url:
+https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282 */
+// Asynchronously load Google Maps
+$.getScript(mapsUrl)
+  .done(function() {
+    ko.applyBindings(new ViewModel());
+  })
+  .fail(function() {
+    alert('Error: Map failed to load. Please reload page.');
+  });
