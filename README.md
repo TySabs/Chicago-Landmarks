@@ -4,6 +4,10 @@
 ## Getting Started
 Tour the world's greatest wonders from the comforts of your home.
 
+### View Online
+View the map online here: [Wonders of the World Map](https://tysabs.github.io/World-Wonders-Map/)
+<hr>
+
 ### View Offline
 #### Offline installation
 First use the command prompt to install Wonders of the World Map App by typing ``git clone https://github.com/TySabs/World-Wonders-Map.git`` in the command prompt
@@ -15,15 +19,11 @@ Via Apache:
 * Navigate from the root of ```localhost``` to ```index.html``` in your web browser.
 
 Via Node.js:
-1. Within the node.js command prompt, run ```npm install``` in the root of the repository.
-2. Once dependencies are installed, run gulp's default task by typing ```gulp``` in the node.js command prompt.
-3. ```index.html``` should be served at ```localhost:8080``` with live reload
-4. Type ```CTRL+C``` in node.js command prompt to turn off your local webserver.
+* Within the node.js command prompt, run ```npm install``` in the root of the repository.
+* Once dependencies are installed, run gulp's default task by typing ```gulp``` in the node.js command prompt.
+* ```index.html``` should be served at ```localhost:8080``` with live reload
+* Type ```CTRL+C``` in node.js command prompt to turn off your local webserver.
 
-<hr>
-
-### View Online
-View the map online here: [Wonders of the World Map](https://tysabs.github.io/World-Wonders-Map/)
 <hr>
 
 ## How to Use Map Application
@@ -43,7 +43,7 @@ View the map online here: [Wonders of the World Map](https://tysabs.github.io/Wo
 * To take advantage of caching, but to keep users on latest version, unique numbers are added to the different iterations concatenated/minified files.
 * Developers can run a webserver with live reload by typing ```gulp```. Live reload will watch for changes and automatically reload a page whenever a change occurs.
 * All tasks will be run when typing ```gulp``` so your webserver should reflect latest changes.
-* A specific task can be called by typing ```gulp [name of task]```, consult ```gulpfile.js``` for task names.
+* A specific task can be called by typing ```gulp [name of task]```. Consult ```gulpfile.js``` for task names.
 
 <hr>
 
