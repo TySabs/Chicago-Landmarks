@@ -20,14 +20,14 @@ var htmlSources = ['index.html'];
 
 gulp.task('devJs', function() {
   gulp.src(jsSources)
-    .pipe(concat('app.dev9.js'))
+    .pipe(concat('app.dev10.js'))
     .pipe(gulp.dest('js/dist/'))
     .pipe(connect.reload())
 });
 
 gulp.task('liveJs', function() {
   gulp.src(jsSources)
-    .pipe(concat('app.min9.js'))
+    .pipe(concat('app.min10.js'))
     .pipe(uglify())
     .pipe(gulp.dest('js/dist/'))
 });
@@ -35,7 +35,7 @@ gulp.task('liveJs', function() {
 
 gulp.task('minCss', function() {
   gulp.src(cssSources)
-    .pipe(concat('liveStyles.min9.css'))
+    .pipe(concat('liveStyles.min10.css'))
     .pipe(cleanCSS())
     .pipe(gulp.dest('css/dist'))
     .pipe(connect.reload())

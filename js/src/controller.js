@@ -240,8 +240,7 @@ var ViewModel = function() {
     }
   }; // End setAsCurrentMarker()
 
-
-
+  // Create all the content within the infoWindow based on clickedLandmark.
   self.populateInfoWindow = function(landmark, infoWindow) {
     var marker = landmark.marker;
 
@@ -322,9 +321,7 @@ var ViewModel = function() {
         }
       });
 
-      // If status is OK, which means pano was found, compute the position of streetView
-      // image, then calculate the heading, then get a panorama from that and
-      // set the options
+      // If status is OK, which means pano was found, create a panorama
       function getStreetView(data, status) {
 
         if (status == google.maps.StreetViewStatus.OK) {
