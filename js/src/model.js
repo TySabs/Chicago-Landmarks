@@ -81,6 +81,15 @@ var landmarks = [
     zoom: 0
   },
   {
+    title: 'St. Basil\'s Cathedral',
+    location: {lat: 55.7525, lng: 37.6231},
+    country: 'Russia',
+    city: 'Moscow',
+    heading: 130,
+    pitch: 10,
+    zoom: 2
+  },
+  {
     title: 'Golden Gate Bridge',
     location: {lat: 37.8199, lng: -122.4804},
     country: 'CA',

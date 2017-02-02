@@ -81,6 +81,15 @@ var landmarks = [
     zoom: 0
   },
   {
+    title: 'St. Basil\'s Cathedral',
+    location: {lat: 55.7525, lng: 37.6231},
+    country: 'Russia',
+    city: 'Moscow',
+    heading: 130,
+    pitch: 10,
+    zoom: 2
+  },
+  {
     title: 'Golden Gate Bridge',
     location: {lat: 37.8199, lng: -122.4804},
     country: 'CA',
@@ -148,12 +157,6 @@ var Marker = function(data, map) {
       icon: defaultIcon,
       id: data
     });
-  marker.weatherConditions = ko.observable();
-  marker.weatherTemperature = ko.observable();
-
-  marker.infoWindow = ko.computed(function() {
-    return marker.weatherConditions() + " " + marker.weatherTemperature();
-  }, this);
 
   // A property of marker to help ViewModel.searchResultsForMarkers
   marker.isVisible = ko.observable(false);
@@ -452,18 +455,6 @@ var ViewModel = function() {
         marker.setAnimation(null);
       });
 
-      // infoWindow.setContent creates the HTML for the infoWindow
-      infoWindow.setContent(
-        '<div class="marker-div">' +
-          '<h2 class="marker-title">' + marker.title + '</h2>' +
-          '<div id="pano"></div>' +
-          '<div class="weather-div">' +
-            '<h3 class="weather-conditions"></h3>' +
-            '<h3 class="weather-temperature"></h3>' +
-          '</div>' +
-        '</div>'
-      );
-
       // weatherConditions variable displays landmark's weather conditions in the infoWindow
       var weatherConditions = '<h3 class="weather-conditions"></h3>';
       // weatherTemperature variable displays landmark's temperature in the infoWindow
@@ -473,21 +464,57 @@ var ViewModel = function() {
       var wundergroundLink = 'https://api.wunderground.com/api/6878610c92332316/conditions/q/' +
       landmark.country + '/' + landmark.city + '.json';
 
+      // Error message for when weather info is blank
+      var weatherUnavailableError = 'Error: Weather currently unavailable.';
+
+      // Error message for when weather fails to load
+      var weatherAjaxFailError = 'Error: Weather failed to load.';
+
       // Pulls weather conditions and temperature for current landmark
       $.ajax({
         url: wundergroundLink,
         success: function(result) {
         // Error handling for when API returns blank information
         if (result.current_observation.weather === '' || undefined) {
-          $('.weather-conditions').html('Error: Weather currently unavailable.');
+          infoWindow.setContent(
+                '<div class="marker-div">' +
+                  '<h2 class="marker-title">' + marker.title + '</h2>' +
+                  '<div id="pano"></div>' +
+                  '<div class="weather-div">' +
+                    '<h3 class="weather-conditions">' + weatherUnavailableError + '</h3>' +
+                  '</div>' +
+                '</div>'
+          );
+          // Display panorama
+          streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+        // Insert weather conditions and temperature to infoWindow if no errors occur
         } else {
-          // Insert weather conditions and temperature to infoWindow if no errors occur
-          $('.weather-conditions').html(result.current_observation.weather);
-          $('.weather-temperature').html(result.current_observation.temperature_string);
+          infoWindow.setContent(
+                '<div class="marker-div">' +
+                  '<h2 class="marker-title">' + marker.title + '</h2>' +
+                  '<div id="pano"></div>' +
+                  '<div class="weather-div">' +
+                    '<h3 class="weather-conditions">' + result.current_observation.weather + '</h3>' +
+                    '<h3 class="weather-temperature">' + result.current_observation.temperature_string + '</h3>' +
+                  '</div>' +
+                '</div>'
+          );
+          // Display panorama
+          streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
         }},
         // Error handling for when weather data fails to load
         error: function() {
-          $('.weather-conditions').html('Error: Weather failed to load.');
+          infoWindow.setContent(
+                '<div class="marker-div">' +
+                  '<h2 class="marker-title">' + marker.title + '</h2>' +
+                  '<div id="pano"></div>' +
+                  '<div class="weather-div">' +
+                    '<h3 class="weather-conditions">' + weatherAjaxFailError + '</h3>' +
+                  '</div>' +
+                '</div>'
+          );
+          // Display panorama
+          streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
         }
       });
 
@@ -503,6 +530,7 @@ var ViewModel = function() {
           var heading = landmark.heading,
               pitch = landmark.pitch,
               zoom = landmark.zoom;
+
 
           // Set the properties of streetview
           var panoramaOptions = {
@@ -529,11 +557,10 @@ var ViewModel = function() {
       var radius = 50;
       // Use streetview service to get closest streetview image within
       // 50 meters of the markers position
-      streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
 
       // Open the infoWindow on the correct marker
       infoWindow.open(self.map, marker);
-    } // End Conditional
+    } // End (infoWindow.marker != marker) Conditional
   }; // End populateInfoWindow()
 
   // Show/Hide list items on screens with max-width of 768px

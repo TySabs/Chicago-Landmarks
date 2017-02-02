@@ -19,12 +19,6 @@ var Marker = function(data, map) {
       icon: defaultIcon,
       id: data
     });
-  marker.weatherConditions = ko.observable();
-  marker.weatherTemperature = ko.observable();
-
-  marker.infoWindow = ko.computed(function() {
-    return marker.weatherConditions() + " " + marker.weatherTemperature();
-  }, this);
 
   // A property of marker to help ViewModel.searchResultsForMarkers
   marker.isVisible = ko.observable(false);
