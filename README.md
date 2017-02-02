@@ -6,7 +6,7 @@ Tour the world's greatest wonders from the comforts of your home.
 
 ### View Online
 View the map online here: [Wonders of the World Map](https://tysabs.github.io/World-Wonders-Map/)
-<hr>
+---
 
 ### View Offline
 #### Offline installation
@@ -24,7 +24,7 @@ Via Node.js:
 * ```index.html``` should be served at ```localhost:8080``` with live reload
 * Type ```CTRL+C``` in node.js command prompt to turn off your local webserver.
 
-<hr>
+---
 
 ## How to Use Map Application
 * Map contains a number of landmarks represented by red markers.
@@ -33,7 +33,7 @@ Via Node.js:
 * Info window will display a street view of the location plus location's current weather conditions.
 * User can use a search box to dynamically filter landmark list and markers.
 
-<hr>
+---
 
 ## Using Gulp and NPM
 * Developers can download all the npm development dependencies by going to the root in the Node.js command prompt. Once in the root of the project, type ```npm install --save-dev``` to install dependencies.
@@ -45,7 +45,7 @@ Via Node.js:
 * All tasks will be run when typing ```gulp``` so your webserver should reflect latest changes.
 * A specific task can be called by typing ```gulp [name of task]```. Consult ```gulpfile.js``` for task names.
 
-<hr>
+---
 
 ## Credits
 * Udacity Front-End Web Developer Nanodegree Program

@@ -3,7 +3,7 @@ var ViewModel = function() {
   var self = this;
 
   // Initialize the map.
-  this.initMap = function() {
+  self.initMap = function() {
     /* Pale Dawn Styles url: https://snazzymaps.com/style/1/pale-dawn */
     var paleDawnStyles = [
       {
@@ -104,24 +104,24 @@ var ViewModel = function() {
     });
   }; // End initMap()
 
-  this.initApp = function() {
-    // this.landmarkList holds all landmarks
-    this.landmarkList = ko.observableArray(landmarks);
+  self.initApp = function() {
+    // self.landmarkList holds all landmarks
+    self.landmarkList = ko.observableArray(landmarks);
 
-    // this.query holds value of searchbox
-    this.query = ko.observable('');
+    // self.query holds value of searchbox
+    self.query = ko.observable('');
 
     // Initialize the map
-    this.initMap();
+    self.initMap();
 
 
     // Initalize all markers
-    this.initMarkers();
+    self.initMarkers();
 
-    /* For more info about self.searchResults, consult this url:
+    /* For more info about self.searchResults, consult self url:
     http://stackoverflow.com/questions/29667134/knockout-search-in-observable-array */
-    // this.searchResultsForLandmarks is a ko.computed that dynamically displays landmark list items
-    this.searchResultsForLandmarks = ko.computed(function() {
+    // self.searchResultsForLandmarks is a ko.computed that dynamically displays landmark list items
+    self.searchResultsForLandmarks = ko.computed(function() {
 
       // self.query() holds value of the searchbox
       // .toLowerCase() makes search results case insensitive
@@ -130,12 +130,12 @@ var ViewModel = function() {
       return self.landmarkList().filter(function(landmark) {
         return landmark.title.toLowerCase().indexOf(query.toLowerCase()) >= 0;
       });
-    }); // End this.searchResultsForLandmarks
+    }); // End self.searchResultsForLandmarks
 
-    /* For more information on how this.filterMarkers, consult this url:
+    /* For more information on how this.searchResultsForMarkers, consult this url:
     http://stackoverflow.com/questions/29557938/removing-map-pin-with-search */
     // this.searchResultsForMarkers is a ko.computed that dynamically displays map markers
-    this.searchResultsForMarkers = ko.computed(function() {
+    self.searchResultsForMarkers = ko.computed(function() {
 
         // self.query() holds value of the searchbox
         // .toLowerCase() makes search results case insensitive
@@ -153,17 +153,17 @@ var ViewModel = function() {
 
           return doesMatch;
       });
-    }); // End this.searchResultsForMarkers()
+    }); // End self.searchResultsForMarkers()
 
-    // Used to display an infoWindow when a marker or list item is clicked by this.setAsCurrentMarker()
-    this.currentMarker = ko.observable();
+    // Used to display an infoWindow when a marker or list item is clicked by self.setAsCurrentMarker()
+    self.currentMarker = ko.observable();
 
     // largeInfoWindow changes to display a marker's corresponding infoWindow
-    this.infoWindow = new google.maps.InfoWindow();
+    self.infoWindow = new google.maps.InfoWindow();
   }; // End initApp()
 
   // Create a marker for each landmark.
-  this.initMarkers = function() {
+  self.initMarkers = function() {
     var map = self.map;
     var bounds = new google.maps.LatLngBounds();
 
@@ -193,7 +193,7 @@ var ViewModel = function() {
     self.map.fitBounds(bounds);
   }; // End initMarkers()
 
-  this.setAsCurrentMarker = function(clickedLandmark) {
+  self.setAsCurrentMarker = function(clickedLandmark) {
 
     // Clear animations for all icons
     self.landmarkList().forEach(function(landmark) {
@@ -207,19 +207,20 @@ var ViewModel = function() {
 
       var clickedLandmarkLng = clickedLandmark.location.lng;
       var clickedLandmarkLat = clickedLandmark.location.lat;
+      var formattedLandmarkLat;
 
       // Conditional sets formattedLandmarkLat according to landmark's height on the map
       // This allows the entire infoWindow to be properly displayed
       if (clickedLandmarkLat > 46) {
-        var formattedLandmarkLat = 82;
+        formattedLandmarkLat = 82;
       } else if (clickedLandmarkLat > 40) {
-        var formattedLandmarkLat = clickedLandmarkLat + 38;
+        formattedLandmarkLat = clickedLandmarkLat + 38;
       } else if (clickedLandmarkLat > 20) {
-        var formattedLandmarkLat = clickedLandmarkLat + 42;
+        formattedLandmarkLat = clickedLandmarkLat + 42;
       } else if (clickedLandmarkLat > -10) {
-        var formattedLandmarkLat = clickedLandmarkLat + 56;
+        formattedLandmarkLat = clickedLandmarkLat + 56;
       } else {
-        var formattedLandmarkLat = clickedLandmarkLat + 74;
+        formattedLandmarkLat = clickedLandmarkLat + 74;
       }
 
       // currentLandmarkLocation allows map to be centered properly when a marker is clicked
@@ -241,10 +242,10 @@ var ViewModel = function() {
 
 
 
-  this.populateInfoWindow = function(landmark, infoWindow) {
+  self.populateInfoWindow = function(landmark, infoWindow) {
     var marker = landmark.marker;
 
-    // Check to make sure infoWindow is not already opened on this marker
+    // Check to make sure infoWindow is not already opened on self marker
     if (infoWindow.marker != marker) {
       infoWindow.setContent('');
       infoWindow.marker = marker;
@@ -340,12 +341,12 @@ var ViewModel = function() {
   }; // End populateInfoWindow()
 
   // Show/Hide list items on screens with max-width of 768px
-  this.toggleHamburger = function() {
+  self.toggleHamburger = function() {
     $('#nav-list').animate({'width':'toggle'}, 350);
   };
 
   // Invoke the initialize function.
-  this.initApp();
+  self.initApp();
 };
 
 // Google maps url
