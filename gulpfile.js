@@ -2,6 +2,7 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
+    connect = require('gulp-connect'),
     cleanCSS = require('gulp-clean-css');
 
 var jsSources = [
@@ -15,15 +16,18 @@ var cssSources = [
   'css/src/style.css'
 ];
 
+var htmlSources = ['index.html'];
+
 gulp.task('devJs', function() {
   gulp.src(jsSources)
-    .pipe(concat('app.dev7.js'))
+    .pipe(concat('app.dev9.js'))
     .pipe(gulp.dest('js/dist/'))
+    .pipe(connect.reload())
 });
 
 gulp.task('liveJs', function() {
   gulp.src(jsSources)
-    .pipe(concat('app.min7.js'))
+    .pipe(concat('app.min9.js'))
     .pipe(uglify())
     .pipe(gulp.dest('js/dist/'))
 });
@@ -31,9 +35,27 @@ gulp.task('liveJs', function() {
 
 gulp.task('minCss', function() {
   gulp.src(cssSources)
-    .pipe(concat('liveStyles.min7.css'))
+    .pipe(concat('liveStyles.min9.css'))
     .pipe(cleanCSS())
-    .pipe(gulp.dest('css/dist'));
+    .pipe(gulp.dest('css/dist'))
+    .pipe(connect.reload())
 });
 
-gulp.task('default', ['devJs', 'liveJs', 'minCss']);
+gulp.task('webserver', function() {
+  connect.server({
+    livereload: true
+  });
+});
+
+gulp.task('html', function() {
+  gulp.src(htmlSources)
+    .pipe(connect.reload())
+});
+
+gulp.task('watch', function() {
+  gulp.watch(jsSources, ['devJs', 'liveJs']);
+  gulp.watch(cssSources, ['minCss']);
+  gulp.watch(htmlSources, ['html']);
+});
+
+gulp.task('default', ['html', 'devJs', 'liveJs', 'minCss', 'webserver', 'watch']);

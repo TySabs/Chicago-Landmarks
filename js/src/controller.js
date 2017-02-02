@@ -222,7 +222,7 @@ var ViewModel = function() {
         var formattedLandmarkLat = clickedLandmarkLat + 74;
       }
 
-      // currentLandmarkLocation allows map to be centered properly
+      // currentLandmarkLocation allows map to be centered properly when a marker is clicked
       var currentLandmarkLocation = {lat: formattedLandmarkLat, lng: clickedLandmarkLng};
 
       // Center map on clicked marker
@@ -262,7 +262,7 @@ var ViewModel = function() {
       infoWindow.setContent(
         '<div class="marker-div">' +
           '<h2 class="marker-title">' + marker.title + '</h2>' +
-          '<div id="pano" data-bind=""></div>' +
+          '<div id="pano"></div>' +
           '<div class="weather-div">' +
             '<h3 class="weather-conditions"></h3>' +
             '<h3 class="weather-temperature"></h3>' +
@@ -355,9 +355,11 @@ var mapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD12rqNI0xx-o1LX
 https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282 */
 // Asynchronously load Google Maps
 $.getScript(mapsUrl)
+// If map is loaded successfully, create our View Model
   .done(function() {
     ko.applyBindings(new ViewModel());
   })
+// If an error occurs while loading google maps api, alert the user
   .fail(function() {
     alert('Error: Map failed to load. Please reload page.');
   });
