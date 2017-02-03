@@ -6,6 +6,7 @@ Tour the world's greatest wonders from the comforts of your home.
 
 ### View Online
 View the map online here: [Wonders of the World Map](https://tysabs.github.io/World-Wonders-Map/)
+
 ---
 
 ### View Offline
