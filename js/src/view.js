@@ -52,6 +52,6 @@ Marker.prototype.makeMarkerIcon = function(markerColor) {
   new google.maps.Size(21, 34),
   new google.maps.Point(0, 0),
   new google.maps.Point(10, 34),
-  new google.maps.Size(21,34));
+  new google.maps.Size(21, 34));
   return markerImage;
 };

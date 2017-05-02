@@ -20,14 +20,14 @@ var htmlSources = ['index.html'];
 
 gulp.task('devJs', function() {
   gulp.src(jsSources)
-    .pipe(concat('app.dev10.js'))
+    .pipe(concat('app.dev11.js'))
     .pipe(gulp.dest('js/dist/'))
     .pipe(connect.reload())
 });
 
 gulp.task('liveJs', function() {
   gulp.src(jsSources)
-    .pipe(concat('app.min10.js'))
+    .pipe(concat('app.min11.js'))
     .pipe(uglify())
     .pipe(gulp.dest('js/dist/'))
 });

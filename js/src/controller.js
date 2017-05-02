@@ -374,7 +374,7 @@ var ViewModel = function() {
 };
 
 // Google maps url
-var mapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD12rqNI0xx-o1LXAxtJ-X-Es30h_oS6j4&v=3";
+var mapsUrl = "https://maps.googleapis.com/maps/api/js?key=AIzaSyChzRTRR31Vc29DBXY_RQNOllbO-86QnwM&v=3";
 
 /* For more info about how $.getScript works, consult this url:
 https://discussions.udacity.com/t/handling-google-maps-in-async-and-fallback/34282 */
