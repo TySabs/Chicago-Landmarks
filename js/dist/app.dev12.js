@@ -31,7 +31,7 @@ var landmarks = [
     location: {lat: 48.8584, lng: 2.2945},
     country: 'France',
     city: 'Paris',
-    heading: 132,
+    heading: 20,
     pitch: 10,
     zoom: 0
   },
@@ -57,8 +57,8 @@ var landmarks = [
     title: 'Taj Mahal',
     location: {lat: 27.1750, lng: 78.0422},
     country: 'India',
-    city: 'Dharmapuri',
-    heading: 0,
+    city: 'New_Delhi',
+    heading: 130,
     pitch: 10,
     zoom: 0
   },
@@ -75,7 +75,7 @@ var landmarks = [
     title: 'El Castillo',
     location: {lat: 20.6830, lng: -88.5686},
     country: 'Mexico',
-    city: 'Yucatan',
+    city: 'Piste',
     heading: -152,
     pitch: 15,
     zoom: 0
@@ -85,7 +85,7 @@ var landmarks = [
     location: {lat: 55.7525, lng: 37.6231},
     country: 'Russia',
     city: 'Moscow',
-    heading: 130,
+    heading: 10,
     pitch: 10,
     zoom: 2
   },
@@ -99,13 +99,13 @@ var landmarks = [
     zoom: 0
   },
   {
-    title: 'Great Wall of China',
-    location: {lat: 40.4318, lng: 116.5700},
-    country: 'China',
-    city: 'Beijing',
-    heading: 130,
+    title: 'Himeji Castle',
+    location: {lat: 34.8394, lng: 134.6939},
+    country: 'Japan',
+    city: 'Himeji',
+    heading: 14,
     pitch: 10,
-    zoom: 0
+    zoom: 10
   },
   {
     title: 'Sydney Opera House',
@@ -295,7 +295,7 @@ var ViewModel = function() {
     self.map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 0, lng: 0},
       styles: paleDawnStyles,
-      zoom: 12,
+      zoom: 1,
       mapTypeControl: false
     });
   }; // End initMap()
@@ -375,9 +375,9 @@ var ViewModel = function() {
       bounds.extend(landmark.marker.position);
 
       // Extend map's bounds to fit current landmark on resize
-      google.maps.event.addDomListener(window, 'resize', function() {
-        map.fitBounds(bounds);
-      });
+      // google.maps.event.addDomListener(window, 'resize', function() {
+      //   map.fitBounds(bounds);
+      // });
 
       // Add a click handler to each mark which calls self.setAsCurrentMarker
       landmark.marker.addListener('click', function() {

@@ -20,14 +20,14 @@ var htmlSources = ['index.html'];
 
 gulp.task('devJs', function() {
   gulp.src(jsSources)
-    .pipe(concat('app.dev11.js'))
+    .pipe(concat('app.dev12.js'))
     .pipe(gulp.dest('js/dist/'))
     .pipe(connect.reload())
 });
 
 gulp.task('liveJs', function() {
   gulp.src(jsSources)
-    .pipe(concat('app.min11.js'))
+    .pipe(concat('app.min12.js'))
     .pipe(uglify())
     .pipe(gulp.dest('js/dist/'))
 });
@@ -35,7 +35,7 @@ gulp.task('liveJs', function() {
 
 gulp.task('minCss', function() {
   gulp.src(cssSources)
-    .pipe(concat('liveStyles.min10.css'))
+    .pipe(concat('liveStyles.min12.css'))
     .pipe(cleanCSS())
     .pipe(gulp.dest('css/dist'))
     .pipe(connect.reload())
@@ -58,4 +58,4 @@ gulp.task('watch', function() {
   gulp.watch(htmlSources, ['html']);
 });
 
-gulp.task('default', ['html', 'devJs', 'liveJs', 'minCss', 'webserver', 'watch']);
+gulp.task('default', [ 'devJs', 'liveJs', 'minCss']);

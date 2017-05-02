@@ -99,7 +99,7 @@ var ViewModel = function() {
     self.map = new google.maps.Map(document.getElementById('map'), {
       center: {lat: 0, lng: 0},
       styles: paleDawnStyles,
-      zoom: 12,
+      zoom: 1,
       mapTypeControl: false
     });
   }; // End initMap()
@@ -179,9 +179,9 @@ var ViewModel = function() {
       bounds.extend(landmark.marker.position);
 
       // Extend map's bounds to fit current landmark on resize
-      google.maps.event.addDomListener(window, 'resize', function() {
-        map.fitBounds(bounds);
-      });
+      // google.maps.event.addDomListener(window, 'resize', function() {
+      //   map.fitBounds(bounds);
+      // });
 
       // Add a click handler to each mark which calls self.setAsCurrentMarker
       landmark.marker.addListener('click', function() {
